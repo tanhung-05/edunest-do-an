@@ -141,6 +141,7 @@ class HoanThienDuLieuSeeder extends Seeder
         $this->phan('Mã giảm giá', fn () => $this->maGiamGia());
         $this->phan('Tài nguyên, ghi chú, yêu thích, thẻ', fn () => $this->linhTinh());
         $this->phan('Mini game, chuyển khoản, giỏ hàng', fn () => $this->troChoiChuyenKhoanGioHang());
+        $this->phan('Giá gia hạn, khóa sắp hết hạn', fn () => $this->giaHan());
         $this->phan('Thông báo', fn () => $this->thongBao());
         // Đổi tên và email sau cùng vì các seeder trên tra theo email cũ.
         $this->phan('Tên và email người dùng', fn () => $this->nguoiDung());
@@ -705,6 +706,23 @@ class HoanThienDuLieuSeeder extends Seeder
             Course::query()->where('sale_status', SaleStatus::DangBan->value)->whereNotIn('id', $owned)->orderBy('id')->skip($n)->limit(2)->get()
                 ->each(fn (Course $c) => $cart->add($student, $c));
         }
+    }
+
+    /** Khóa có thời hạn được mở bán gia hạn (khoảng 40% giá); An có một khóa còn 5 ngày để demo gia hạn. */
+    private function giaHan(): void
+    {
+        Course::query()->where('sale_status', SaleStatus::DangBan->value)->whereNotNull('access_months')->whereNull('extension_price')->get()
+            ->each(fn (Course $c) => $c->forceFill(['extension_price' => (int) (round($c->price * 0.4 / 1000) * 1000)])->save());
+        $an = $this->u('an.nguyen@edunest.test');
+        $course = Course::query()->where('sale_status', SaleStatus::DangBan->value)->whereNotNull('access_months')->whereNotNull('extension_price')
+            ->whereNotIn('id', Enrollment::query()->where('user_id', $an->id)->pluck('course_id'))
+            ->whereNotIn('id', DB::table('cart_items')->join('carts', 'carts.id', '=', 'cart_items.cart_id')->where('carts.user_id', $an->id)->pluck('cart_items.course_id'))
+            ->orderByDesc('id')->first();
+        if ($course === null) {
+            return;
+        }
+        $enrollment = $this->donHoanTat($an, $course, OrderSource::MuaNgay, 175);
+        $enrollment->forceFill(['het_han_luc' => now()->addDays(5)->setTime(23, 59)])->save();
     }
 
     private function thongBao(): void
