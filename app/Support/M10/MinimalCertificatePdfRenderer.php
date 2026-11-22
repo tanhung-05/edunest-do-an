@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Support\M10;
+
+use App\Models\M10\Certificate;
+use Illuminate\Support\Str;
+
+final class MinimalCertificatePdfRenderer implements CertificatePdfRenderer
+{
+    public function render(Certificate $certificate): string
+    {
+        $lines = [
+            'Chứng nhận hoàn thành',
+            'Họ tên: '.$certificate->holder_name,
+            'Khóa học: '.$certificate->course_title,
+            'Ngày cấp: '.$certificate->issued_on->format('d/m/Y'),
+            'Mã xác minh: '.$certificate->certificate_number,
+            CertificateVerification::url($certificate),
+        ];
+        $content = "BT /F1 12 Tf 50 760 Td 19 TL\n";
+        foreach ($lines as $line) {
+            $text = str_replace(['\\', '(', ')', "\r", "\n"], ['\\\\', '\\(', '\\)', ' ', ' '], Str::ascii($line, 'vi'));
+            $content .= "($text) Tj T*\n";
+        }
+        $content .= 'ET';
+        $objects = [
+            '<< /Type /Catalog /Pages 2 0 R >>',
+            '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+            '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>',
+            '<< /Length '.strlen($content)." >>\nstream\n".$content."\nendstream",
+            '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+        ];
+        $pdf = "%PDF-1.4\n";
+        $offsets = [];
+        foreach ($objects as $i => $object) {
+            $offsets[] = strlen($pdf);
+            $pdf .= ($i + 1)." 0 obj\n".$object."\nendobj\n";
+        }
+        $xref = strlen($pdf);
+        $pdf .= "xref\n0 6\n0000000000 65535 f \n";
+        foreach ($offsets as $offset) {
+            $pdf .= sprintf("%010d 00000 n \n", $offset);
+        }
+
+        return $pdf."trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n".$xref."\n%%EOF\n";
+    }
+}

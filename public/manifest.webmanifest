@@ -1,0 +1,25 @@
+{
+    "name": "EduNest",
+    "short_name": "EduNest",
+    "description": "Học trực tuyến với khóa học do giáo viên soạn, giáo vụ duyệt.",
+    "lang": "vi",
+    "start_url": "/dashboard?source=pwa",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#0f172a",
+    "icons": [
+        { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "shortcuts": [
+        { "name": "Khóa của tôi", "url": "/student/courses?source=pwa" },
+        { "name": "Buổi trực tiếp", "url": "/student/live?source=pwa" }
+    ]
+}

@@ -1,0 +1,290 @@
+@import 'tailwindcss';
+
+@import 'tw-animate-css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-display:
+        'Bricolage Grotesque', 'Be Vietnam Pro', ui-sans-serif, system-ui,
+        sans-serif;
+    --font-sans:
+        'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+
+    --radius-lg: var(--radius);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-sm: calc(var(--radius) - 4px);
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-navy: #0b1f3a;
+    --color-navy-2: #16335c;
+    --color-amber: #f59e0b;
+    --color-amber-soft: #fde7b8;
+    --color-mist: var(--mist);
+    --color-surface: var(--surface);
+    --color-surface-ink: var(--surface-ink);
+    --color-surface-muted: var(--surface-muted);
+    --color-success: var(--success);
+
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* Token EduNest "khối màu" (06-man-hinh/mockup/tokens.css): xanh than #0B1F3A + hổ phách #F59E0B + trắng.
+   Màu phẳng, không chuyển sắc, không bóng mờ; xanh lá/đỏ chỉ cho chữ trạng thái. */
+:root {
+    /* v5 (he-thiet-ke-v5.md): nền sáng trung tính; xanh than cho chữ, nút chính và khối tối;
+       hổ phách chỉ cho điểm cần chú ý (tiến độ, nhãn nổi bật, nút trên nền tối). */
+    --navy: #0b1f3a;
+    --amber: #f59e0b;
+    --white: #ffffff;
+    --mist: #f3f5f8;
+
+    --radius: 0.875rem;
+    --pad: 2rem;
+    --background: #f6f7f9;
+    --foreground: #0f172a;
+    --card: var(--white);
+    --card-foreground: #0f172a;
+    --popover: var(--white);
+    --popover-foreground: #0f172a;
+    --primary: var(--navy);
+    --primary-foreground: var(--white);
+    --surface: var(--navy);
+    --surface-ink: var(--white);
+    --surface-line: rgb(255 255 255 / 0.18);
+    --surface-muted: rgb(255 255 255 / 0.72);
+    --secondary: #eef1f5;
+    --secondary-foreground: #0f172a;
+    --muted: #eef1f5;
+    --muted-foreground: #5b6474;
+    --accent: #eef1f5;
+    --accent-foreground: #0f172a;
+    --success: #15803d;
+    --warning: #b45309;
+    --destructive: #dc2626;
+    --destructive-foreground: var(--white);
+    --border: #e4e8ee;
+    --input: #d5dbe4;
+    --ring: #0b1f3a;
+    --chart-1: var(--navy);
+    --chart-2: var(--amber);
+    --chart-3: #8b9ab0;
+    --chart-4: #c3cdda;
+    --chart-5: #15803d;
+    --sidebar: var(--white);
+    --sidebar-foreground: #0f172a;
+    --sidebar-primary: var(--navy);
+    --sidebar-primary-foreground: var(--white);
+    --sidebar-accent: #eef1f5;
+    --sidebar-accent-foreground: #0f172a;
+    --sidebar-border: #e4e8ee;
+    --sidebar-ring: var(--navy);
+    --shadow-soft:
+        0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(15 23 42 / 0.12);
+    --shadow-lift:
+        0 2px 4px rgb(15 23 42 / 0.05), 0 18px 40px -16px rgb(15 23 42 / 0.22);
+    color-scheme: light;
+}
+
+.dark {
+    --mist: #0d1b2e;
+    --accent: #132d52;
+    --accent-foreground: #f1f4f8;
+    --ring: var(--amber);
+    --background: #06121f;
+    --foreground: #f1f4f8;
+    --card: #0b1f3a;
+    --card-foreground: #f1f4f8;
+    --popover: #0b1f3a;
+    --popover-foreground: #f1f4f8;
+    --primary: var(--white);
+    --primary-foreground: var(--navy);
+    --surface: #132d52;
+    --secondary: #132d52;
+    --secondary-foreground: #f1f4f8;
+    --muted: #11253f;
+    --muted-foreground: #9aaac0;
+    --border: #1d3a60;
+    --input: #2a4a73;
+    --chart-1: #f1f4f8;
+    --sidebar: #0a1a30;
+    --sidebar-foreground: #f1f4f8;
+    --sidebar-primary: var(--amber);
+    --sidebar-primary-foreground: var(--navy);
+    --sidebar-accent: #132d52;
+    --sidebar-accent-foreground: #f1f4f8;
+    --sidebar-border: #1d3a60;
+    color-scheme: dark;
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+
+    h1,
+    h2,
+    h3 {
+        font-family: var(--font-display);
+        letter-spacing: -0.02em;
+    }
+
+    body {
+        @apply bg-background text-foreground antialiased;
+        font-variant-numeric: tabular-nums;
+    }
+
+    :focus-visible {
+        outline: 3px solid var(--ring);
+        outline-offset: 2px;
+    }
+}
+
+@layer components {
+    /* Khối màu lớn, đệm 32px (--pad). */
+    .block-surface {
+        background: var(--surface);
+        color: var(--surface-ink);
+        padding: var(--pad);
+        border-radius: var(--radius);
+    }
+
+    .block-accent {
+        background: var(--accent);
+        color: var(--accent-foreground);
+        padding: var(--pad);
+        border-radius: var(--radius);
+    }
+}
+
+/* v5: bóng mềm thay bóng cứng; thẻ có liên kết nhích 2px khi rê chuột (skill design-taste-frontend, quy tắc 5). */
+@utility shadow-hard {
+    box-shadow: var(--shadow-lift);
+}
+
+@utility shadow-soft {
+    box-shadow: var(--shadow-soft);
+}
+
+@utility lift {
+    transition:
+        transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    &:hover,
+    &:focus-visible {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lift);
+    }
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+        &:hover,
+        &:focus-visible {
+            transform: none;
+        }
+    }
+}
+
+/* Ảnh trong khung có liên kết phóng nhẹ 1.03 khi rê chuột. */
+@utility photo-zoom {
+    & img {
+        transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    &:hover img,
+    &:focus-visible img {
+        transform: scale(1.03);
+    }
+    @media (prefers-reduced-motion: reduce) {
+        & img {
+            transition: none;
+        }
+    }
+}
+
+@utility display-tight {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+    /* Đủ chỗ cho dấu tiếng Việt chồng tầng (ề, ỗ) khi SplitText che từng từ. */
+    line-height: 1.08;
+    font-weight: 700;
+}
+
+@utility font-display {
+    font-family: var(--font-display);
+}
+
+/* Mặt nạ của SplitText: chừa chỗ trên/dưới cho dấu tiếng Việt, không làm đổi khoảng dòng. */
+.split-word-mask {
+    padding-block: 0.14em;
+    margin-block: -0.14em;
+}
+
+/* P7 mini game: bong bóng nhấp nhô (tắt khi giảm chuyển động qua motion-safe). */
+@keyframes bob {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* P10 Mưa chữ: chữ nền rơi chậm phía sau chữ chính (chỉ trang trí, tắt khi giảm chuyển động). */
+@keyframes rain {
+    from {
+        transform: translateY(-2rem);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    to {
+        transform: translateY(32rem);
+        opacity: 0;
+    }
+}
