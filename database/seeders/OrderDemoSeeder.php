@@ -90,7 +90,7 @@ final class OrderDemoSeeder extends Seeder
 
         $amount = $scenario === 'SAITIEN' ? max(0, $course->price - 1000) : $course->price;
         $payment = $order->payments()->create([
-            'transaction_code' => 'GD-DEMO-'.$scenario, 'channel' => PaymentChannel::MoPhong, 'txn_status' => PaymentTxnStatus::ThanhCong,
+            'transaction_code' => 'GD-'.substr($code, 4).'01', 'channel' => PaymentChannel::MoPhong, 'txn_status' => PaymentTxnStatus::ThanhCong,
             'requested_amount' => $course->price, 'received_amount' => $amount,
             'reconcile_status' => in_array($scenario, ['SAITIEN', 'CANHOAN'], true) ? PaymentReconcileStatus::CanHoan : PaymentReconcileStatus::HopLe,
             'is_late' => $scenario === 'CANHOAN', 'terms_accepted_at' => $now, 'succeeded_at' => $now, 'reconciled_at' => $now,
