@@ -13,9 +13,9 @@ return [
         'key' => env('GEMINI_API_KEY'),
         'model' => env('GEMINI_MODEL', 'gemini-3.5-flash-lite'),
         'endpoint' => env('GEMINI_ENDPOINT', 'https://generativelanguage.googleapis.com/v1beta'),
-        'timeout' => (int) env('GEMINI_TIMEOUT', 20),
+        'timeout' => (int) env('GEMINI_TIMEOUT', 12),
         // Thử lần lượt khi mô hình chính quá tải (503, 429) hoặc bị ngừng (404).
-        'fallback' => env('GEMINI_FALLBACK_MODELS', 'gemini-flash-lite-latest,gemini-3.8-flash'),
+        'fallback' => env('GEMINI_FALLBACK_MODELS', 'gemini-flash-lite-latest,gemini-3.6-flash,gemini-3-flash-preview'),
     ],
 
     // P10 (CR-260): MoMo môi trường thử. Lấy partner code, access key, secret key thử ở developers.momo.vn; trống thì tắt kênh.

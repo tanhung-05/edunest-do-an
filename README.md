@@ -23,17 +23,17 @@ Nền tảng học trực tuyến cho học sinh THPT. Mỗi khóa học có vid
 
 ## Điểm nổi bật
 
-| | |
-|---|---|
-| 🎓 **Học theo lộ trình** | Khóa học chia chương, bài. Có video, bài đọc, PDF và bài kiểm tra. Tiến độ được lưu để học tiếp đúng chỗ trên mọi thiết bị. |
-| ✅ **Chấm điểm tức thì** | Năm dạng câu hỏi: một đáp án, nhiều đáp án, đúng/sai, điền từ, sắp xếp. Xem lời giải sau khi đạt. Học xong nhận chứng nhận có mã tra cứu. |
-| 🏆 **Thi thử trực tuyến** | Kỳ thi có giờ mở và giờ đóng. Hệ thống giám sát rời tab, xếp hạng và vinh danh người đứng đầu. |
-| 🎮 **Ôn tập như chơi** | Thẻ ghi nhớ lặp lại ngắt quãng và hai mini game Bắn bong bóng, Mưa chữ. Học viên tích XP, lên cấp, giữ chuỗi ngày học, nhận huy hiệu và lên bảng xếp hạng. |
-| 🤖 **Trợ lý AI** | Hỏi đáp ngay trong bài học. Giáo viên dùng AI để soạn nhanh câu hỏi (Google Gemini). |
-| 💳 **Thanh toán đa kênh** | Giỏ hàng, mã giảm giá, gói combo, mã kích hoạt. Thanh toán qua MoMo hoặc chuyển khoản VietQR, đối soát tự động và cấp quyền học ngay. |
-| 🔔 **Kết nối thời gian thực** | Thông báo tức thì, email và thông báo đẩy trên trình duyệt. Có chat hỗ trợ, cộng đồng và buổi học trực tiếp kèm bản ghi. |
-| 👨‍👩‍👧 **Phụ huynh đồng hành** | Phụ huynh xem tiến độ, kết quả kiểm tra và nhận báo cáo tuần của con. |
-| 🔐 **An toàn tài khoản** | Xác thực 2 lớp cho nhân sự, giới hạn số thiết bị, cảnh báo đăng nhập lạ, watermark nội dung và nhật ký kiểm toán. |
+|                               |                                                                                                                                                            |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🎓 **Học theo lộ trình**      | Khóa học chia chương, bài. Có video, bài đọc, PDF và bài kiểm tra. Tiến độ được lưu để học tiếp đúng chỗ trên mọi thiết bị.                                |
+| ✅ **Chấm điểm tức thì**      | Năm dạng câu hỏi: một đáp án, nhiều đáp án, đúng/sai, điền từ, sắp xếp. Xem lời giải sau khi đạt. Học xong nhận chứng nhận có mã tra cứu.                  |
+| 🏆 **Thi thử trực tuyến**     | Kỳ thi có giờ mở và giờ đóng. Hệ thống giám sát rời tab, xếp hạng và vinh danh người đứng đầu.                                                             |
+| 🎮 **Ôn tập như chơi**        | Thẻ ghi nhớ lặp lại ngắt quãng và hai mini game Bắn bong bóng, Mưa chữ. Học viên tích XP, lên cấp, giữ chuỗi ngày học, nhận huy hiệu và lên bảng xếp hạng. |
+| 🤖 **Trợ lý AI**              | Hỏi đáp ngay trong bài học. Giáo viên dùng AI để soạn nhanh câu hỏi (Google Gemini).                                                                       |
+| 💳 **Thanh toán đa kênh**     | Giỏ hàng, mã giảm giá, gói combo, mã kích hoạt. Thanh toán qua MoMo hoặc chuyển khoản VietQR, đối soát tự động và cấp quyền học ngay.                      |
+| 🔔 **Kết nối thời gian thực** | Thông báo tức thì, email và thông báo đẩy trên trình duyệt. Có chat hỗ trợ, cộng đồng và buổi học trực tiếp kèm bản ghi.                                   |
+| 👨‍👩‍👧 **Phụ huynh đồng hành**    | Phụ huynh xem tiến độ, kết quả kiểm tra và nhận báo cáo tuần của con.                                                                                      |
+| 🔐 **An toàn tài khoản**      | Xác thực 2 lớp cho nhân sự, giới hạn số thiết bị, cảnh báo đăng nhập lạ, watermark nội dung và nhật ký kiểm toán.                                          |
 
 ## Giao diện
 
@@ -97,63 +97,63 @@ Giao diện co giãn theo màn hình và cài được như ứng dụng (PWA).
 
 ## Vai trò
 
-| Vai | Khu vực | Làm được gì |
-|---|---|---|
-| Khách | `/`, `/courses`, `/teachers`, `/verify` | Xem khóa học và giáo viên, tra cứu chứng nhận, chat với tư vấn viên |
-| Học viên | `/student` | Mua khóa, học, làm kiểm tra, thi thử, luyện tập, thẻ ghi nhớ, mini game, cộng đồng, giới thiệu bạn bè |
-| Giáo viên | `/teacher` | Soạn khóa và ngân hàng câu hỏi, trả lời hỏi đáp, mở buổi học trực tiếp, xem kết quả học viên |
-| Giáo vụ | `/academic` | Duyệt khóa, phân công giáo viên theo chuyên môn, quản lý đơn hàng, hoàn tiền, mã kích hoạt, mã giảm giá, kỳ thi, hoa hồng, kiểm duyệt cộng đồng |
-| Quản trị | `/admin` | Người dùng và vai trò, danh mục, huy hiệu, cấu hình hệ thống, doanh thu, nhật ký kiểm toán |
-| Phụ huynh | `/guardian` | Liên kết với tài khoản con, xem tiến độ và báo cáo tuần |
+| Vai       | Khu vực                                 | Làm được gì                                                                                                                                     |
+| --------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Khách     | `/`, `/courses`, `/teachers`, `/verify` | Xem khóa học và giáo viên, tra cứu chứng nhận, chat với tư vấn viên                                                                             |
+| Học viên  | `/student`                              | Mua khóa, học, làm kiểm tra, thi thử, luyện tập, thẻ ghi nhớ, mini game, cộng đồng, giới thiệu bạn bè                                           |
+| Giáo viên | `/teacher`                              | Soạn khóa và ngân hàng câu hỏi, trả lời hỏi đáp, mở buổi học trực tiếp, xem kết quả học viên                                                    |
+| Giáo vụ   | `/academic`                             | Duyệt khóa, phân công giáo viên theo chuyên môn, quản lý đơn hàng, hoàn tiền, mã kích hoạt, mã giảm giá, kỳ thi, hoa hồng, kiểm duyệt cộng đồng |
+| Quản trị  | `/admin`                                | Người dùng và vai trò, danh mục, huy hiệu, cấu hình hệ thống, doanh thu, nhật ký kiểm toán                                                      |
+| Phụ huynh | `/guardian`                             | Liên kết với tài khoản con, xem tiến độ và báo cáo tuần                                                                                         |
 
 ## Chức năng theo phân hệ
 
 <details>
 <summary><b>Xem đầy đủ 29 phân hệ</b></summary>
 
-| Mã | Phân hệ |
-|---|---|
-| M01 | Tài khoản, xác thực, xác thực 2 lớp, phân quyền theo vai |
-| M02 | Danh mục, cấp độ, thẻ, hồ sơ và chuyên môn giáo viên |
-| M03 | Biên soạn khóa học |
-| M04 | Câu hỏi và quy tắc chấm |
-| M05 | Duyệt, công bố, quản lý phiên bản |
-| M06 | Danh mục công khai, tìm kiếm, trang khóa học, trang giáo viên |
-| M07 | Đơn hàng, thanh toán, cấp quyền |
-| M08 | Thời hạn truy cập và gia hạn |
-| M09 | Trình học và tiến độ |
-| M10 | Bài kiểm tra, hoàn thành khóa, chứng nhận |
-| M11 | Báo cáo, nhật ký, tác vụ nền |
-| M12 | Mã giảm giá, giỏ hàng, danh sách yêu thích |
-| M13 | Mã kích hoạt khóa học |
-| M14 | Đánh giá khóa học |
-| M15 | Thông báo thời gian thực, email, thông báo đẩy |
-| M16 | Chống chia sẻ tài khoản, watermark |
-| M17 | Hỏi đáp theo bài, ghi chú |
-| M18 | Thi thử trực tuyến, xếp hạng, vinh danh |
-| M19 | Phân tích kết quả cho giáo viên, dashboard giáo vụ |
-| M20 | Luyện tập |
-| M21 | XP, cấp độ, chuỗi ngày, huy hiệu, bảng xếp hạng |
-| M22 | Thẻ ghi nhớ và mini game |
-| M23 | Phụ huynh |
-| M24 | Gói combo, tiếp thị liên kết |
-| M25 | Trợ lý AI |
-| M26 | Buổi học trực tiếp |
-| M27 | Cộng đồng |
+| Mã  | Phân hệ                                                        |
+| --- | -------------------------------------------------------------- |
+| M01 | Tài khoản, xác thực, xác thực 2 lớp, phân quyền theo vai       |
+| M02 | Danh mục, cấp độ, thẻ, hồ sơ và chuyên môn giáo viên           |
+| M03 | Biên soạn khóa học                                             |
+| M04 | Câu hỏi và quy tắc chấm                                        |
+| M05 | Duyệt, công bố, quản lý phiên bản                              |
+| M06 | Danh mục công khai, tìm kiếm, trang khóa học, trang giáo viên  |
+| M07 | Đơn hàng, thanh toán, cấp quyền                                |
+| M08 | Thời hạn truy cập và gia hạn                                   |
+| M09 | Trình học và tiến độ                                           |
+| M10 | Bài kiểm tra, hoàn thành khóa, chứng nhận                      |
+| M11 | Báo cáo, nhật ký, tác vụ nền                                   |
+| M12 | Mã giảm giá, giỏ hàng, danh sách yêu thích                     |
+| M13 | Mã kích hoạt khóa học                                          |
+| M14 | Đánh giá khóa học                                              |
+| M15 | Thông báo thời gian thực, email, thông báo đẩy                 |
+| M16 | Chống chia sẻ tài khoản, watermark                             |
+| M17 | Hỏi đáp theo bài, ghi chú                                      |
+| M18 | Thi thử trực tuyến, xếp hạng, vinh danh                        |
+| M19 | Phân tích kết quả cho giáo viên, dashboard giáo vụ             |
+| M20 | Luyện tập                                                      |
+| M21 | XP, cấp độ, chuỗi ngày, huy hiệu, bảng xếp hạng                |
+| M22 | Thẻ ghi nhớ và mini game                                       |
+| M23 | Phụ huynh                                                      |
+| M24 | Gói combo, tiếp thị liên kết                                   |
+| M25 | Trợ lý AI                                                      |
+| M26 | Buổi học trực tiếp                                             |
+| M27 | Cộng đồng                                                      |
 | M28 | Chuyển khoản VietQR qua webhook, API cho ứng dụng di động, PWA |
-| M29 | Chat hỗ trợ |
+| M29 | Chat hỗ trợ                                                    |
 
 </details>
 
 ## Công nghệ
 
-| Tầng | Công nghệ |
-|---|---|
-| Máy chủ | PHP 8.3, Laravel 13, Fortify (xác thực, 2FA), Sanctum (API), Reverb (WebSocket), hàng đợi trên CSDL |
-| Giao diện | Inertia 3, React 19, TypeScript, Tailwind CSS 4, shadcn/ui, Wayfinder |
-| Dữ liệu | MySQL 8.4 với khóa dòng, ràng buộc CHECK, mức cô lập READ COMMITTED |
-| Tích hợp | Google Gemini, MoMo, VietQR (chuẩn EMVCo), Web Push (VAPID), SMTP |
-| Chất lượng | Pest, PHPStan (Larastan), Pint, ESLint và Prettier qua Vite+, GitHub Actions |
+| Tầng       | Công nghệ                                                                                           |
+| ---------- | --------------------------------------------------------------------------------------------------- |
+| Máy chủ    | PHP 8.3, Laravel 13, Fortify (xác thực, 2FA), Sanctum (API), Reverb (WebSocket), hàng đợi trên CSDL |
+| Giao diện  | Inertia 3, React 19, TypeScript, Tailwind CSS 4, shadcn/ui, Wayfinder                               |
+| Dữ liệu    | MySQL 8.4 với khóa dòng, ràng buộc CHECK, mức cô lập READ COMMITTED                                 |
+| Tích hợp   | Google Gemini, MoMo, VietQR (chuẩn EMVCo), Web Push (VAPID), SMTP                                   |
+| Chất lượng | Pest, PHPStan (Larastan), Pint, ESLint và Prettier qua Vite+, GitHub Actions                        |
 
 ## Bắt đầu nhanh
 
@@ -189,15 +189,16 @@ npm run dev                                                        # chỉ cần
 
 Dữ liệu mẫu có 14 khóa học với nội dung thật và khoảng 40 học viên đang học. Đơn hàng, phiên bản khóa, kỳ thi, mã giảm giá, hỏi đáp, cộng đồng và mini game đều có dữ liệu ở đủ các trạng thái. Mọi tài khoản dùng mật khẩu `matkhau123`.
 
-| Vai | Email |
-|---|---|
-| Quản trị | `quang.le.edunest@mailinator.com` |
-| Giáo vụ | `lan.pham.edunest@mailinator.com` |
+| Vai       | Email                             |
+| --------- | --------------------------------- |
+| Quản trị  | `quang.le.edunest@mailinator.com` |
+| Giáo vụ   | `lan.pham.edunest@mailinator.com` |
 | Giáo viên | `hoa.tran.edunest@mailinator.com` |
-| Học viên | `an.nguyen.2007@mailinator.com` |
-| Phụ huynh | `phuc.nguyen.ph@mailinator.com` |
+| Học viên  | `an.nguyen.2007@mailinator.com`   |
+| Phụ huynh | `phuc.nguyen.ph@mailinator.com`   |
 
 > [!NOTE]
+>
 > - Giáo vụ và Quản trị phải bật xác thực 2 lớp ở lần đăng nhập đầu.
 > - Thư gửi tới địa chỉ `@mailinator.com` đọc được công khai trên mailinator.com.
 > - Đơn chờ thanh toán, kỳ thi và buổi học trực tiếp tính theo thời điểm nạp dữ liệu. Muốn các mốc này còn mới thì nạp lại.
@@ -218,32 +219,32 @@ Trên Windows, chạy script dưới đây để nhập khóa. Script ẩn ký t
 powershell -ExecutionPolicy Bypass -File scripts/cau-hinh-khoa.ps1
 ```
 
-| Dịch vụ | Biến môi trường | Ghi chú |
-|---|---|---|
-| Email | `MAIL_MAILER=smtp`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS` | Với Gmail, dùng mật khẩu ứng dụng 16 ký tự |
-| Trợ lý AI | `GEMINI_API_KEY`, `GEMINI_MODEL` | Kiểm tra kết nối: `php artisan edunest:ai-check` |
-| MoMo | `MOMO_ENDPOINT`, `MOMO_PARTNER_CODE`, `MOMO_ACCESS_KEY`, `MOMO_SECRET_KEY` | Có khóa thì trang đơn hàng hiện thêm lựa chọn MoMo |
-| VietQR | `BANK_BIN`, `BANK_SIM_BANK`, `BANK_SIM_ACCOUNT`, `BANK_SIM_ACCOUNT_NAME` | Đủ 4 giá trị thì mã QR quét được bằng ứng dụng ngân hàng |
-| Thông báo đẩy | `VAPID_SUBJECT`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` | Sinh khóa: `php artisan edunest:vapid` |
-| Thời gian thực | `REVERB_*`, `VITE_REVERB_*` | Đổi xong chạy lại `npm run build` |
+| Dịch vụ        | Biến môi trường                                                                                     | Ghi chú                                                  |
+| -------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| Email          | `MAIL_MAILER=smtp`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS` | Với Gmail, dùng mật khẩu ứng dụng 16 ký tự               |
+| Trợ lý AI      | `GEMINI_API_KEY`, `GEMINI_MODEL`                                                                    | Kiểm tra kết nối: `php artisan edunest:ai-check`         |
+| MoMo           | `MOMO_ENDPOINT`, `MOMO_PARTNER_CODE`, `MOMO_ACCESS_KEY`, `MOMO_SECRET_KEY`                          | Có khóa thì trang đơn hàng hiện thêm lựa chọn MoMo       |
+| VietQR         | `BANK_BIN`, `BANK_SIM_BANK`, `BANK_SIM_ACCOUNT`, `BANK_SIM_ACCOUNT_NAME`                            | Đủ 4 giá trị thì mã QR quét được bằng ứng dụng ngân hàng |
+| Thông báo đẩy  | `VAPID_SUBJECT`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`                                            | Sinh khóa: `php artisan edunest:vapid`                   |
+| Thời gian thực | `REVERB_*`, `VITE_REVERB_*`                                                                         | Đổi xong chạy lại `npm run build`                        |
 
 Sau khi sửa `.env`, chạy `php artisan config:clear` rồi khởi động lại hàng đợi.
 
 ## Lệnh Artisan
 
-| Lệnh | Việc |
-|---|---|
-| `edunest:expire-overdue-orders` | Đóng đơn quá hạn thanh toán |
-| `edunest:recover-granting-orders` | Cấp lại quyền cho đơn bị kẹt |
+| Lệnh                                              | Việc                                       |
+| ------------------------------------------------- | ------------------------------------------ |
+| `edunest:expire-overdue-orders`                   | Đóng đơn quá hạn thanh toán                |
+| `edunest:recover-granting-orders`                 | Cấp lại quyền cho đơn bị kẹt               |
 | `edunest:commerce {reminders\|promotions\|codes}` | Nhắc giỏ hàng, chạy khuyến mãi, hết hạn mã |
-| `edunest:exams` | Mở, đóng kỳ thi và công bố kết quả |
-| `edunest:practice` | Lịch luyện tập |
-| `edunest:guardian-reports` | Gửi báo cáo tuần cho phụ huynh |
-| `learning:finalize-overdue-attempts` | Nộp các bài làm quá giờ |
-| `learning:aggregate-daily-report` | Tổng hợp số liệu học tập theo ngày |
-| `edunest:ops-status` | Xem tình trạng hàng đợi và tác vụ nền |
-| `edunest:demo-exam --close-in=2` | Tạo kỳ thi đóng sau vài phút để thử nhanh |
-| `edunest:admin:reset-2fa {email}` | Đặt lại xác thực 2 lớp cho một tài khoản |
+| `edunest:exams`                                   | Mở, đóng kỳ thi và công bố kết quả         |
+| `edunest:practice`                                | Lịch luyện tập                             |
+| `edunest:guardian-reports`                        | Gửi báo cáo tuần cho phụ huynh             |
+| `learning:finalize-overdue-attempts`              | Nộp các bài làm quá giờ                    |
+| `learning:aggregate-daily-report`                 | Tổng hợp số liệu học tập theo ngày         |
+| `edunest:ops-status`                              | Xem tình trạng hàng đợi và tác vụ nền      |
+| `edunest:demo-exam --close-in=2`                  | Tạo kỳ thi đóng sau vài phút để thử nhanh  |
+| `edunest:admin:reset-2fa {email}`                 | Đặt lại xác thực 2 lớp cho một tài khoản   |
 
 `php artisan schedule:work` tự chạy các lệnh định kỳ ở trên.
 
@@ -284,11 +285,11 @@ tests/                    Feature và Unit (Pest)
 
 ## Xử lý sự cố
 
-| Hiện tượng | Cách xử lý |
-|---|---|
-| Đã thanh toán nhưng chưa vào học được | Hàng đợi chưa chạy hoặc thiếu kênh `grants` |
-| Sửa giao diện không thấy thay đổi | Chạy `npm run build`, hoặc dùng `npm run dev` |
-| Không có thông báo thời gian thực | Chạy `php artisan reverb:start` và kiểm tra biến `REVERB_*` |
+| Hiện tượng                                         | Cách xử lý                                                                                      |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Đã thanh toán nhưng chưa vào học được              | Hàng đợi chưa chạy hoặc thiếu kênh `grants`                                                     |
+| Sửa giao diện không thấy thay đổi                  | Chạy `npm run build`, hoặc dùng `npm run dev`                                                   |
+| Không có thông báo thời gian thực                  | Chạy `php artisan reverb:start` và kiểm tra biến `REVERB_*`                                     |
 | Lỗi tạo khóa EC khi bật thông báo đẩy trên Windows | Thêm `OPENSSL_CONF=<thư mục PHP>/extras/ssl/openssl.cnf` vào `.env`, rồi khởi động lại hàng đợi |
-| Mất mã 2FA của tài khoản quản trị | `php artisan edunest:admin:reset-2fa <email>` |
-| Đổi `.env` không có tác dụng | `php artisan config:clear` |
+| Mất mã 2FA của tài khoản quản trị                  | `php artisan edunest:admin:reset-2fa <email>`                                                   |
+| Đổi `.env` không có tác dụng                       | `php artisan config:clear`                                                                      |
