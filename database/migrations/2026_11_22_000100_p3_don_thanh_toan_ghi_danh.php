@@ -45,7 +45,7 @@ return new class extends Migration
             $t->index(['status', 'expires_at']);
             $t->index(['status', 'updated_at']);
         });
-        DB::statement("ALTER TABLE orders ADD CONSTRAINT orders_total_chk CHECK (total <= subtotal)");
+        DB::statement('ALTER TABLE orders ADD CONSTRAINT orders_total_chk CHECK (total <= subtotal)');
         DB::statement("ALTER TABLE orders ADD CONSTRAINT orders_before_cxl_chk CHECK (status_before_cxl IS NULL OR status_before_cxl IN ('HET_HAN','DA_HUY'))");
 
         Schema::create('order_items', function (Blueprint $t) {
