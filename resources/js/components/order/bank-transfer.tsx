@@ -14,6 +14,8 @@ export type TransferInfo = {
     memo: string;
     expires_at: string;
     qr_svg: string;
+    /** CR-261: QR chuẩn VietQR, quét được bằng app ngân hàng. */
+    vietqr?: boolean;
 };
 
 /**
@@ -107,6 +109,11 @@ export function BankTransfer({
                 <dt className="text-muted-foreground">Hạn</dt>
                 <dd>{vnTime(transfer.expires_at)}</dd>
             </dl>
+            <p className="text-center text-xs text-muted-foreground">
+                {transfer.vietqr
+                    ? 'Mở app ngân hàng, chọn Quét QR: số tài khoản, số tiền và nội dung được điền sẵn.'
+                    : 'QR minh họa của môi trường demo, không quét bằng app ngân hàng.'}
+            </p>
             <p className="text-xs text-muted-foreground">
                 Chuyển đúng số tiền và nội dung. Chuyển sai số tiền hoặc chuyển
                 lần thứ hai sẽ được giáo vụ hoàn lại, không cấp quyền học.

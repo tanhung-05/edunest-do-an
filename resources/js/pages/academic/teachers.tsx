@@ -21,14 +21,22 @@ type Teacher = {
     status_label: string;
     authoring_count: number;
     has_profile: boolean;
+    subject_ids: number[];
 };
+
+type Subject = { id: number; name: string };
 
 type Props = {
     teachers: Teacher[];
     filters: { q: string };
+    subjects: Subject[];
 };
 
-export default function AcademicTeachers({ teachers: list, filters }: Props) {
+export default function AcademicTeachers({
+    teachers: list,
+    filters,
+    subjects,
+}: Props) {
     const [q, setQ] = useState(filters.q);
     const [profileFor, setProfileFor] = useState<number | null>(null);
 
@@ -180,6 +188,9 @@ export default function AcademicTeachers({ teachers: list, filters }: Props) {
                                         Trạng thái
                                     </th>
                                     <th className="px-4 py-3 font-semibold">
+                                        Chuyên môn
+                                    </th>
+                                    <th className="px-4 py-3 font-semibold">
                                         Hồ sơ
                                     </th>
                                 </tr>
@@ -198,6 +209,12 @@ export default function AcademicTeachers({ teachers: list, filters }: Props) {
                                             <StatusText
                                                 status={t.status}
                                                 label={t.status_label}
+                                            />
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <SubjectCell
+                                                teacher={t}
+                                                subjects={subjects}
                                             />
                                         </td>
                                         <td className="px-4 py-3">
@@ -294,5 +311,98 @@ export default function AcademicTeachers({ teachers: list, filters }: Props) {
                 )}
             </section>
         </Page>
+    );
+}
+
+/** CR-259 (UAT 22/11): Giáo vụ ghi chuyên môn để gợi ý người soạn đúng môn khi giao khóa. */
+function SubjectCell({
+    teacher,
+    subjects,
+}: {
+    teacher: Teacher;
+    subjects: Subject[];
+}) {
+    const [editing, setEditing] = useState(false);
+    const [picked, setPicked] = useState<number[]>(teacher.subject_ids);
+    const [saving, setSaving] = useState(false);
+    const names = subjects
+        .filter((s) => teacher.subject_ids.includes(s.id))
+        .map((s) => s.name);
+
+    if (!editing) {
+        return (
+            <div className="grid min-w-40 gap-1">
+                <span
+                    className={
+                        names.length === 0 ? 'text-muted-foreground' : undefined
+                    }
+                >
+                    {names.length === 0 ? 'Chưa ghi' : names.join(', ')}
+                </span>
+                <button
+                    type="button"
+                    className="justify-self-start text-sm underline"
+                    onClick={() => {
+                        setPicked(teacher.subject_ids);
+                        setEditing(true);
+                    }}
+                    aria-label={`Sửa chuyên môn của ${teacher.name}`}
+                >
+                    Sửa
+                </button>
+            </div>
+        );
+    }
+
+    const toggle = (id: number) =>
+        setPicked((cur) =>
+            cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id],
+        );
+
+    return (
+        <fieldset className="grid min-w-56 gap-2">
+            <legend className="sr-only">Chuyên môn của {teacher.name}</legend>
+            <div className="grid max-h-48 gap-1 overflow-y-auto rounded-md border border-border p-2">
+                {subjects.map((s) => (
+                    <label key={s.id} className="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            checked={picked.includes(s.id)}
+                            onChange={() => toggle(s.id)}
+                        />
+                        {s.name}
+                    </label>
+                ))}
+            </div>
+            <div className="flex gap-2">
+                <Button
+                    size="sm"
+                    type="button"
+                    disabled={saving}
+                    onClick={() =>
+                        router.put(
+                            teachers.subjects.update.url(teacher.id),
+                            { subject_category_ids: picked },
+                            {
+                                preserveScroll: true,
+                                onStart: () => setSaving(true),
+                                onFinish: () => setSaving(false),
+                                onSuccess: () => setEditing(false),
+                            },
+                        )
+                    }
+                >
+                    Lưu
+                </Button>
+                <Button
+                    size="sm"
+                    type="button"
+                    variant="ghost"
+                    onClick={() => setEditing(false)}
+                >
+                    Hủy
+                </Button>
+            </div>
+        </fieldset>
     );
 }

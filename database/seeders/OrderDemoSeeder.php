@@ -41,11 +41,11 @@ final class OrderDemoSeeder extends Seeder
     private function seedOrder(User $student, Course $course, string $scenario): void
     {
         $code = 'EDN-'.match ($scenario) {
-            'XONG' => 'DMXXXX2345',
-            'HETHAN' => 'DMHHHH2345',
-            'SAITIEN' => 'DMSSSS2345',
-            'CAPLOI' => 'DMCCCC2345',
-            default => 'DMRRRR2345',
+            'XONG' => 'K7Q2M9TXWA',
+            'HETHAN' => 'H4VN8RZKPC',
+            'SAITIEN' => 'S9TB3WQEMY',
+            'CAPLOI' => 'C2FR6KXVNH',
+            default => 'R8YD4PMGTQ',
         };
         // Cùng gác với đặt mua; từng mã demo chỉ khởi tạo một lần.
         User::query()->whereKey($student->id)->lockForUpdate()->firstOrFail();

@@ -16,6 +16,7 @@ type Props = {
 export default function Security({
     canSetupTwoFactor,
     twoFactorEnabled,
+    twoFactorPending,
     mustSetupTwoFactor,
 }: Props) {
     const { flash } = usePage().props;
@@ -99,6 +100,7 @@ export default function Security({
                             canManageTwoFactor
                             requiresConfirmation
                             twoFactorEnabled={twoFactorEnabled}
+                            twoFactorPending={twoFactorPending}
                         />
                     </Block>
                 )}

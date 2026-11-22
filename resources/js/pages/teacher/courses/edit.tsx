@@ -1,4 +1,5 @@
 import { Form, Head, Link, router, useForm } from '@inertiajs/react';
+import RichTextEditor from '@/components/rich-text-editor';
 import { ArrowDown, ArrowUp, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { ConfirmAction, MoreActions } from '@/components/confirm-action';
@@ -395,7 +396,17 @@ function Outline({
                                             placeholder="Tên bài mới"
                                             aria-label="Tên bài mới"
                                             required
-                                            className="min-w-40 flex-1"
+                                            onInvalid={(e) =>
+                                                e.currentTarget.setCustomValidity(
+                                                    'Nhập tên bài trước khi bấm Thêm bài.',
+                                                )
+                                            }
+                                            onInput={(e) =>
+                                                e.currentTarget.setCustomValidity(
+                                                    '',
+                                                )
+                                            }
+                                            className="peer min-w-40 flex-1"
                                         />
                                         <select
                                             name="type"
@@ -414,9 +425,14 @@ function Outline({
                                         <Button size="sm" disabled={processing}>
                                             Thêm bài
                                         </Button>
-                                        {errors.title && (
+                                        {errors.title ? (
                                             <p className="w-full text-sm text-destructive">
                                                 {errors.title}
+                                            </p>
+                                        ) : (
+                                            <p className="hidden w-full text-sm text-destructive peer-user-invalid:block">
+                                                Nhập tên bài trước khi bấm Thêm
+                                                bài.
                                             </p>
                                         )}
                                     </>
@@ -431,7 +447,7 @@ function Outline({
                     {...teacher.courseVersions.sections.store.form(versionId)}
                     options={{ preserveScroll: true }}
                     resetOnSuccess
-                    className="mt-4 flex gap-2"
+                    className="mt-4 flex flex-wrap gap-2"
                 >
                     {({ processing }) => (
                         <>
@@ -440,10 +456,22 @@ function Outline({
                                 placeholder="Tên chương mới"
                                 aria-label="Tên chương mới"
                                 required
+                                onInvalid={(e) =>
+                                    e.currentTarget.setCustomValidity(
+                                        'Nhập tên chương trước khi bấm Thêm chương.',
+                                    )
+                                }
+                                onInput={(e) =>
+                                    e.currentTarget.setCustomValidity('')
+                                }
+                                className="peer min-w-40 flex-1"
                             />
                             <Button variant="outline" disabled={processing}>
                                 Thêm chương
                             </Button>
+                            <p className="hidden w-full text-sm text-destructive peer-user-invalid:block">
+                                Nhập tên chương trước khi bấm Thêm chương.
+                            </p>
                         </>
                     )}
                 </Form>
@@ -670,19 +698,17 @@ function LessonEditor({
                 </Field>
                 {lesson.type === 'BAI_DOC' && (
                     <Field
-                        label="Nội dung (HTML)"
+                        label="Nội dung bài đọc"
                         htmlFor="l-content"
                         error={form.errors.content}
-                        hint="Hệ thống lọc thẻ không an toàn khi lưu."
+                        hint="Dùng thanh công cụ để in đậm, đặt tiêu đề, tạo danh sách. Hệ thống lọc thẻ không an toàn khi lưu."
                     >
-                        <textarea
+                        <RichTextEditor
+                            key={lesson.id}
                             id="l-content"
-                            className={`${textareaClass} min-h-64 font-mono`}
                             value={form.data.content}
                             disabled={!canEdit}
-                            onChange={(e) =>
-                                form.setData('content', e.target.value)
-                            }
+                            onChange={(html) => form.setData('content', html)}
                         />
                     </Field>
                 )}

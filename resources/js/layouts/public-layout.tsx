@@ -33,7 +33,9 @@ export default function PublicLayout({
     } = usePage();
     const [scrolled, setScrolled] = useState(false);
     const path = url.split('?')[0];
-    const overPhoto = path === '/' && !scrolled;
+    // Trang chủ và Giới thiệu mở đầu bằng ảnh tràn viền: thanh trên trong suốt, không đệm trên.
+    const photoHero = path === '/' || path === '/about';
+    const overPhoto = photoHero && !scrolled;
 
     // Lenis chỉ ở layout công khai (skill lenis); GSAP giữ vòng lặp, ScrollTrigger cập nhật theo Lenis.
     useEffect(() => {
@@ -116,8 +118,14 @@ export default function PublicLayout({
                     </Link>
                     <nav
                         aria-label="Chính"
-                        className="hidden items-center gap-1 text-sm font-medium md:flex"
+                        className="hidden items-center gap-1 text-sm font-medium lg:flex"
                     >
+                        <Link
+                            href={publicRoutes.about()}
+                            className={navLink(path === '/about')}
+                        >
+                            Giới thiệu
+                        </Link>
                         <Link
                             href={publicRoutes.courses.index()}
                             className={navLink(onCatalog)}
@@ -180,7 +188,7 @@ export default function PublicLayout({
                     </div>
                 </div>
             </header>
-            <main className={cn('flex-1', path !== '/' && 'pt-24')}>
+            <main className={cn('flex-1', !photoHero && 'pt-24')}>
                 {children}
             </main>
             <ChatWidget withAi />
@@ -204,6 +212,9 @@ export default function PublicLayout({
                         className="grid content-start gap-2.5 text-sm"
                     >
                         <p className="font-semibold text-white">Khám phá</p>
+                        <Link href={publicRoutes.about()} className={footLink}>
+                            Giới thiệu EduNest
+                        </Link>
                         <Link
                             href={publicRoutes.courses.index()}
                             className={footLink}
@@ -249,7 +260,7 @@ export default function PublicLayout({
     );
 }
 
-/** Menu trên điện thoại (dưới md): các mục chính, tư vấn AI, đăng nhập (UAT 22/11). */
+/** Menu trên điện thoại, máy tính bảng (dưới lg): các mục chính, tư vấn AI, đăng nhập (UAT 22/11). */
 function MobileMenu({
     overPhoto,
     signedIn,
@@ -267,7 +278,7 @@ function MobileMenu({
                     type="button"
                     aria-label="Mở menu"
                     className={cn(
-                        'grid size-10 place-items-center rounded-full transition-colors md:hidden',
+                        'grid size-10 place-items-center rounded-full transition-colors lg:hidden',
                         overPhoto ? 'hover:bg-white/10' : 'hover:bg-slate-100',
                     )}
                 >
@@ -280,6 +291,11 @@ function MobileMenu({
                     Các mục chính của EduNest
                 </SheetDescription>
                 <nav aria-label="Chính trên điện thoại" className="grid gap-1">
+                    <SheetClose asChild>
+                        <Link href={publicRoutes.about()} className={item}>
+                            Giới thiệu
+                        </Link>
+                    </SheetClose>
                     <SheetClose asChild>
                         <Link
                             href={publicRoutes.courses.index()}

@@ -12,12 +12,13 @@ use Illuminate\Support\Facades\DB;
  */
 final class TeacherList
 {
-    /** @return list<array{id: int, name: string, email: string, status: string, status_label: string, authoring_count: int, has_profile: bool}> */
+    /** @return list<array{id: int, name: string, email: string, status: string, status_label: string, authoring_count: int, has_profile: bool, subject_ids: list<int>}> */
     public function get(string $search = ''): array
     {
         $q = User::query()
             ->whereHas('roles', fn ($r) => $r->where('code', RoleCode::GiaoVien->value))
             ->withExists('teacherProfile')
+            ->with('teacherProfile:id,user_id,subject_category_ids')
             ->addSelect(['authoring_count' => DB::table('course_authors')->selectRaw('count(*)')
                 ->whereColumn('course_authors.user_id', 'users.id')->whereNotNull('current_key')])
             ->orderBy('name');
@@ -33,6 +34,7 @@ final class TeacherList
             'status_label' => $u->status->label(),
             'authoring_count' => (int) $u->getAttribute('authoring_count'),
             'has_profile' => (bool) $u->getAttribute('teacher_profile_exists'),
+            'subject_ids' => $u->teacherProfile->subject_category_ids ?? [],
         ])->all());
     }
 }

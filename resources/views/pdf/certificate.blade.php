@@ -11,6 +11,7 @@
         .inner { position: absolute; top: 32px; left: 32px; right: 32px; bottom: 32px; border: 1px solid #f59e0b; }
         .band { position: absolute; top: 33px; left: 33px; width: 14px; bottom: 33px; background: #0b1f3a; }
         .content { position: absolute; top: 120px; left: 110px; width: 922px; text-align: center; }
+        .mark { width: 44px; height: 44px; margin-bottom: 8px; }
         .brand { font-size: 15px; letter-spacing: 3px; color: #0b1f3a; font-weight: bold; }
         .brand span { color: #f59e0b; }
         h1 { font-family: 'DejaVu Serif', serif; font-size: 44px; margin: 30px 0 8px; color: #0b1f3a; }
@@ -32,6 +33,7 @@
     <div class="inner"></div>
     <div class="band"></div>
     <div class="content">
+        <img class="mark" src="{{ public_path('images/brand/edunest-dau-128.png') }}" alt="">
         <div class="brand">EDU<span>NEST</span></div>
         <h1>Chứng nhận hoàn thành</h1>
         <p class="lead">EduNest chứng nhận học viên</p>

@@ -42,7 +42,9 @@ class DashboardController extends Controller
                 'expires_soon' => EnrollmentValidityChecker::for($enrollment, $at) === EnrollmentValidity::ConHan
                     && $enrollment->het_han_luc?->lte($at->addDays(7)) === true,
                 'progress' => $progress[$enrollment->id],
-                'learning_entry' => LearningEntry::for($user, $enrollment),
+                'learning_entry' => $entry = LearningEntry::for($user, $enrollment),
+                // UAT 22/11: khóa đã học hết vẫn có nút ôn lại trên bảng điều khiển.
+                'review_url' => $entry === null ? LearningEntry::review($user, $enrollment) : null,
             ]),
         ]);
     }

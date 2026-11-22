@@ -2,6 +2,8 @@
 
 namespace App\Support\M15;
 
+use App\Jobs\M15\SendWebPush;
+use App\Models\M15\PushSubscription;
 use App\Notifications\EduNotification;
 use Illuminate\Database\QueryException;
 use Illuminate\Notifications\Notification;
@@ -26,6 +28,11 @@ final class DedupedDatabaseChannel
                 'dedupe_key' => $notification->dedupeKey === null ? null : mb_substr($notification->dedupeKey, 0, 150),
                 'created_at' => now(), 'updated_at' => now(),
             ]);
+            // CR-262: bản ghi mới (không trùng) thì đẩy tới trình duyệt đã đăng ký, qua hàng đợi sau khi giao dịch chốt.
+            if (WebPushConfig::enabled() && PushSubscription::query()->where('user_id', $notifiable->getKey())->exists()) {
+                $data = $notification->toArray($notifiable);
+                SendWebPush::dispatch((int) $notifiable->getKey(), ['title' => $data['title'], 'body' => $data['body'], 'url' => $data['url']])->afterCommit();
+            }
         } catch (QueryException $e) {
             if (($e->errorInfo[1] ?? null) !== 1062) {
                 throw $e;

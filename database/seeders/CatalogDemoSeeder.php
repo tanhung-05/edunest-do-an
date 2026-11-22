@@ -4,9 +4,12 @@ namespace Database\Seeders;
 
 use App\Actions\M03\AssignCourseAuthoring;
 use App\Actions\M03\ChangeSaleStatus;
+use App\Actions\M04\QuestionBankActions;
 use App\Actions\M05\EditDraftContent;
 use App\Actions\M05\VersionTransitions;
 use App\Enums\M03\LearningMode;
+use App\Enums\M04\QuestionDifficulty;
+use App\Enums\M04\QuestionType;
 use App\Enums\M05\LessonType;
 use App\Models\M02\Category;
 use App\Models\M02\Level;
@@ -73,22 +76,41 @@ class CatalogDemoSeeder extends Seeder
             'author_id' => $author->id,
         ]);
         $v = CourseVersion::query()->where('course_id', $course->id)->whereNotNull('open_draft_key')->firstOrFail();
-        $v->forceFill([
-            'summary' => 'Khóa '.$title.' bám sát chương trình, học theo lộ trình rõ ràng.',
-            'objectives' => "Nắm chắc kiến thức trọng tâm.\nLàm được dạng bài thường gặp.",
-            'description' => '<p>Khóa gồm bài giảng ngắn, bài đọc và bài kiểm tra cuối chương.</p>',
-        ])->save();
+        // Dữ liệu thật (22/11): nội dung từng khóa ở database/seeders/du-lieu.
+        $data = self::curriculum()[$title];
+        $v->forceFill(['summary' => $data['summary'], 'objectives' => $data['objectives'], 'description' => $data['description']])->save();
         $edit = app(EditDraftContent::class);
-        $s = $edit->addSection($author, $v->id, 'Chương 1. Mở đầu');
-        $l = $edit->addLesson($author, $s->id, 'Giới thiệu khóa học', LessonType::BaiDoc);
-        $edit->saveLesson($author, $l->id, ['content' => '<p>Chào mừng bạn đến với '.e($title).'.</p>', 'is_required' => true, 'is_preview' => true]);
-        if ($pdf !== null) {
-            $p = $edit->addLesson($author, $s->id, 'Đề cương khóa (PDF)', LessonType::Pdf);
-            Lesson::query()->whereKey($p->id)->update(['pdf_path' => $pdf, 'is_preview' => true]);
+        $first = true;
+        $last = null;
+        foreach ($data['chapters'] as $ci => [$chapter, $lessons]) {
+            $s = $edit->addSection($author, $v->id, $chapter);
+            $last = $s;
+            if ($ci === 0 && $pdf !== null) {
+                $p = $edit->addLesson($author, $s->id, 'Đề cương khóa học (PDF)', LessonType::Pdf);
+                Lesson::query()->whereKey($p->id)->update(['pdf_path' => $pdf, 'is_preview' => true]);
+            }
+            foreach ($lessons as [$lessonTitle, $html]) {
+                $x = $edit->addLesson($author, $s->id, $lessonTitle, LessonType::BaiDoc);
+                $edit->saveLesson($author, $x->id, ['content' => $html, 'is_required' => true, 'is_preview' => $first]);
+                $first = false;
+            }
         }
-        foreach (['Kiến thức trọng tâm', 'Bài tập vận dụng'] as $t) {
-            $x = $edit->addLesson($author, $s->id, $t, LessonType::BaiDoc);
-            $edit->saveLesson($author, $x->id, ['content' => '<p>'.$t.'.</p>', 'is_required' => true]);
+        $bank = app(QuestionBankActions::class)->createBank($author, $course, 'Câu hỏi ôn tập');
+        $ids = [];
+        foreach ($data['questions'] as $qi => [$stem, $opts, $correct]) {
+            $ids[] = app(QuestionBankActions::class)->createQuestion($author, $bank, [
+                'type' => QuestionType::MotDapAn,
+                'difficulty' => [QuestionDifficulty::De, QuestionDifficulty::TrungBinh, QuestionDifficulty::Kho][$qi % 3],
+                'stem' => $stem,
+                'explanation' => 'Đáp án đúng: '.$opts[$correct].'.',
+                'options' => array_map(fn ($o, $i) => ['content' => $o, 'is_correct' => $i === $correct], $opts, array_keys($opts)),
+            ])->id;
+        }
+        if ($last !== null) {
+            $quiz = $edit->addLesson($author, $last->id, 'Bài kiểm tra cuối khóa', LessonType::Quiz);
+            $edit->saveQuiz($author, $quiz->id, 60, 15, 3);
+            $edit->setQuizQuestions($author, $quiz->id, $ids);
+            $edit->saveLesson($author, $quiz->id, ['is_required' => true, 'is_final_test' => true]);
         }
         $flow = app(VersionTransitions::class);
         $flow->submit($author, $v);
@@ -96,6 +118,12 @@ class CatalogDemoSeeder extends Seeder
         $flow->publish($lan, $v->fresh() ?? $v);
 
         return $course->fresh() ?? $course;
+    }
+
+    /** @return array<string, array{summary: string, objectives: string, description: string, chapters: list<array{0: string, 1: list<array{0: string, 1: string}>}>, questions: list<array{0: string, 1: list<string>, 2: int}>}> */
+    public static function curriculum(): array
+    {
+        return [...require __DIR__.'/du-lieu/khoa-hoc-tu-nhien.php', ...require __DIR__.'/du-lieu/khoa-hoc-xa-hoi-ngoai-ngu.php'];
     }
 
     /** PDF một trang hợp lệ tối thiểu để thử xem thử. */
@@ -108,7 +136,7 @@ class CatalogDemoSeeder extends Seeder
             null,
             '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
         ];
-        $stream = 'BT /F1 24 Tf 72 760 Td (EduNest - De cuong khoa hoc) Tj ET';
+        $stream = 'BT /F1 22 Tf 72 760 Td (EduNest - De cuong khoa hoc) Tj /F1 12 Tf 0 -40 Td (Muc tieu, noi dung tung chuong va cach danh gia.) Tj 0 -20 Td (Hoc vien hoan thanh bai bat buoc va dat bai kiem tra cuoi khoa de nhan chung nhan.) Tj ET';
         $objs[3] = '<< /Length '.strlen($stream)." >>\nstream\n".$stream."\nendstream";
         $out = "%PDF-1.4\n";
         $offsets = [];

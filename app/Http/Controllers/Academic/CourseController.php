@@ -188,7 +188,7 @@ class CourseController extends Controller
     /** @return array<string, mixed> */
     public static function options(): array
     {
-        $cats = Category::query()->orderBy('position')->orderBy('name')->get();
+        $cats = Category::query()->orderBy('position')->orderBy('name')->get()->toBase();
 
         return [
             'categories' => $cats->whereNotNull('parent_id')->map(fn (Category $c) => [
@@ -198,8 +198,11 @@ class CourseController extends Controller
                 ->sortBy('name')->values(),
             'levels' => Level::query()->orderBy('position')->orderBy('name')->get(['id', 'name']),
             'tags' => Tag::query()->orderBy('name')->get(['id', 'name']),
+            // CR-259: kèm chuyên môn để gợi ý người soạn đúng môn.
             'teachers' => User::query()->whereHas('roles', fn ($q) => $q->where('code', RoleCode::GiaoVien->value))
-                ->where('status', 'HOAT_DONG')->orderBy('name')->get(['id', 'name', 'email']),
+                ->where('status', 'HOAT_DONG')->with('teacherProfile:id,user_id,subject_category_ids')->orderBy('name')->get(['id', 'name', 'email'])->toBase()
+                ->map(fn (User $u) => ['id' => $u->id, 'name' => $u->name, 'email' => $u->email,
+                    'subject_ids' => $u->teacherProfile->subject_category_ids ?? []])->values(),
             'learningModes' => array_map(fn (LearningMode $m) => ['value' => $m->value, 'label' => $m->label()], LearningMode::cases()),
         ];
     }

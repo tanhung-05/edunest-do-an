@@ -1,6 +1,7 @@
 import { Form, Head, Link, router } from '@inertiajs/react';
 import { CircleAlert, Hourglass, Layers, Store } from 'lucide-react';
 import { useState } from 'react';
+import { AuthorSelect } from '@/components/author-select';
 import { Block, Field, Page, selectClass } from '@/components/page';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -148,6 +149,8 @@ export default function AcademicCourses({
 }
 
 function CourseForm({ options }: { options: CourseOptions }) {
+    const [categoryId, setCategoryId] = useState<number | null>(null);
+
     return (
         <Form
             {...courses.store.form()}
@@ -173,19 +176,11 @@ function CourseForm({ options }: { options: CourseOptions }) {
                         htmlFor="author_id"
                         error={errors.author_id}
                     >
-                        <select
-                            id="author_id"
-                            name="author_id"
+                        <AuthorSelect
+                            teachers={options.teachers}
+                            categoryId={categoryId}
                             required
-                            className={selectClass}
-                        >
-                            <option value="">Chọn</option>
-                            {options.teachers.map((t) => (
-                                <option key={t.id} value={t.id}>
-                                    {t.name}
-                                </option>
-                            ))}
-                        </select>
+                        />
                     </Field>
                     <Field
                         label="Danh mục"
@@ -197,6 +192,13 @@ function CourseForm({ options }: { options: CourseOptions }) {
                             name="category_id"
                             required
                             className={selectClass}
+                            onChange={(e) =>
+                                setCategoryId(
+                                    e.target.value === ''
+                                        ? null
+                                        : Number(e.target.value),
+                                )
+                            }
                         >
                             <option value="">Chọn</option>
                             {options.categories.map((c) => (

@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-<div class="brand">EDU<span>NEST</span></div>
+<div class="brand"><img src="{{ public_path('images/brand/edunest-dau-128.png') }}" alt="" style="width: 26px; height: 26px; vertical-align: middle; margin-right: 6px;">EDU<span>NEST</span></div>
 <h1>Hóa đơn điện tử</h1>
 <table class="meta">
     <tr><td class="muted" width="22%">Số hóa đơn</td><td><b>{{ $number }}</b></td></tr>

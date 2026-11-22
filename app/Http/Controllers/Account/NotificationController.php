@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Account;
 use App\Enums\M15\NotificationKind;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\EduNotification;
 use App\Support\M15\Notifier;
+use App\Support\M15\WebPushConfig;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,6 +32,8 @@ final class NotificationController extends Controller
                 'code' => $k->value, 'label' => $k->label(), 'mutable' => $k->mutable(),
                 'muted' => in_array($k->value, Notifier::mutes($user), true),
             ], NotificationKind::cases()),
+            // CR-262: khóa công khai VAPID để trình duyệt đăng ký nhận thông báo đẩy; null thì ẩn nút bật.
+            'push_public_key' => WebPushConfig::enabled() ? WebPushConfig::publicKey() : null,
         ]);
     }
 
@@ -51,11 +55,13 @@ final class NotificationController extends Controller
         $row = $user->notifications()->whereKey($notification)->firstOrFail();
         $row->markAsRead();
         $url = $row->data['url'] ?? null;
+        // Thông báo cũ lưu đường dẫn tuyệt đối theo APP_URL: đổi về đường dẫn trong ứng dụng.
+        $url = is_string($url) ? EduNotification::relative($url) : null;
 
         // P9.2: chỉ chuyển tới đường dẫn trong ứng dụng, phòng dữ liệu thông báo chứa link ngoài.
         $host = is_string($url) ? parse_url($url, PHP_URL_HOST) : null;
         $internal = is_string($url) && $url !== '' && (str_starts_with($url, '/') && ! str_starts_with($url, '//')
-            || ($host !== null && $host === parse_url(config()->string('app.url'), PHP_URL_HOST)) || $host === $request->getHost());
+            || ($host !== null && $host === $request->getHost()));
 
         return $internal ? redirect()->to($url) : back();
     }

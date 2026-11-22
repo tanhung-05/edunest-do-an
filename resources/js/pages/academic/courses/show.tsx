@@ -1,5 +1,6 @@
 import { Form, Head, Link } from '@inertiajs/react';
 import { ConfirmAction, MoreActions } from '@/components/confirm-action';
+import { AuthorSelect } from '@/components/author-select';
 import type { ConfirmSpec } from '@/components/confirm-action';
 import { Block, Field, Page, selectClass } from '@/components/page';
 import { Button } from '@/components/ui/button';
@@ -292,20 +293,13 @@ export default function AcademicCourseShow({
                                         htmlFor="author_id"
                                         error={errors.author_id}
                                     >
-                                        <select
-                                            id="author_id"
-                                            name="author_id"
+                                        <AuthorSelect
+                                            teachers={options.teachers}
+                                            categoryId={course.category_id}
                                             defaultValue={
                                                 course.author_id ?? ''
                                             }
-                                            className={selectClass}
-                                        >
-                                            {options.teachers.map((t) => (
-                                                <option key={t.id} value={t.id}>
-                                                    {t.name}
-                                                </option>
-                                            ))}
-                                        </select>
+                                        />
                                     </Field>
                                     <Field
                                         label="Hạn soạn"

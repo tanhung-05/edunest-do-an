@@ -18,6 +18,21 @@ return [
         'fallback' => env('GEMINI_FALLBACK_MODELS', 'gemini-flash-lite-latest,gemini-3.8-flash'),
     ],
 
+    // P10 (CR-260): MoMo môi trường thử. Lấy partner code, access key, secret key thử ở developers.momo.vn; trống thì tắt kênh.
+    'momo' => [
+        'endpoint' => rtrim((string) env('MOMO_ENDPOINT', 'https://test-payment.momo.vn'), '/'),
+        'partner_code' => env('MOMO_PARTNER_CODE'),
+        'access_key' => env('MOMO_ACCESS_KEY'),
+        'secret_key' => env('MOMO_SECRET_KEY'),
+    ],
+
+    // P10 (CR-262): thông báo đẩy trình duyệt. Cặp khóa VAPID sinh trên máy; trống thì tắt.
+    'webpush' => [
+        'subject' => env('VAPID_SUBJECT', 'mailto:no-reply@edunest.test'),
+        'public_key' => env('VAPID_PUBLIC_KEY'),
+        'private_key' => env('VAPID_PRIVATE_KEY'),
+    ],
+
     // P10 (CR-258): số hotline hiện trong hộp chat, trang liên hệ.
     'support' => [
         'hotline' => env('SUPPORT_HOTLINE', '0123 456 789'),
@@ -28,6 +43,8 @@ return [
         'bank' => env('BANK_SIM_BANK', 'Ngân hàng Mô phỏng'),
         'account_number' => env('BANK_SIM_ACCOUNT', '0000000000'),
         'account_name' => env('BANK_SIM_ACCOUNT_NAME', 'EDUNEST DEMO'),
+        // CR-261: mã BIN 6 số của ngân hàng nhận (VD 970436 Vietcombank, 970422 MB, 970415 VietinBank, 970418 BIDV, 970407 Techcombank).
+        'bin' => env('BANK_BIN'),
     ],
 
     /*

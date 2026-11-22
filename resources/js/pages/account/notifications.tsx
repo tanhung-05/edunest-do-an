@@ -2,6 +2,7 @@ import { Form, Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { vnTime } from '@/components/commerce';
 import { Block, Page } from '@/components/page';
+import { PushToggle } from '@/components/push-toggle';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import notifications from '@/routes/account/notifications';
@@ -27,9 +28,11 @@ type Paged = {
 export default function Notifications({
     notifications: page,
     kinds,
+    push_public_key = null,
 }: {
     notifications: Paged;
     kinds: Kind[];
+    push_public_key?: string | null;
 }) {
     const [muted, setMuted] = useState<string[]>(
         kinds.filter((k) => k.muted).map((k) => k.code),
@@ -135,8 +138,11 @@ export default function Notifications({
                         </nav>
                     )}
                 </Block>
-                <Block className="h-fit">
-                    <h2 className="mb-3 font-semibold">Loại thông báo nhận</h2>
+                <Block className="grid h-fit gap-4">
+                    {push_public_key && (
+                        <PushToggle publicKey={push_public_key} />
+                    )}
+                    <h2 className="font-semibold">Loại thông báo nhận</h2>
                     <div className="grid gap-3">
                         {kinds.map((k) => (
                             <label

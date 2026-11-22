@@ -128,10 +128,12 @@ final class ExamClock
         if ($published) {
             DB::afterCommit(function () use ($id) {
                 $event = ExamEvent::query()->findOrFail($id);
-                $users = User::query()->whereIn('id', QuizAttempt::query()->where('exam_event_id', $id)->select('user_id'))->get();
+                $attempts = QuizAttempt::query()->where('exam_event_id', $id)->pluck('id', 'user_id');
+                $users = User::query()->whereIn('id', $attempts->keys())->get();
                 foreach ($users as $user) {
+                    // UAT 22/11: dẫn thẳng tới kết quả bài làm của chính người nhận (học viên hay nhân sự dự thi).
                     Notifier::send($user, NotificationKind::KyThi, 'Có kết quả kỳ thi', 'Kỳ "'.$event->title.'" đã công bố kết quả.',
-                        route('exams.show', $event), 'exam-published:'.$id.':'.$user->id);
+                        route('exams.attempts.result', $attempts[$user->id], false), 'exam-published:'.$id.':'.$user->id);
                 }
             });
         }

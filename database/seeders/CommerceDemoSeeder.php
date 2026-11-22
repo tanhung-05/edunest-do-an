@@ -59,7 +59,7 @@ final class CommerceDemoSeeder extends Seeder
             $course = $courses[1];
             $batch = ActivationCodeBatch::query()->create([
                 'course_id' => $course->id, 'quantity' => 20, 'redeem_until' => $today->addMonths(3)->endOfDay()->utc(),
-                'access_months' => $course->access_months, 'note' => 'Kèm sách tham khảo (dữ liệu mẫu)', 'created_by_id' => $lan->id,
+                'access_months' => $course->access_months, 'note' => 'Tặng kèm sách tóm tắt công thức bản in', 'created_by_id' => $lan->id,
             ]);
             $codes = [];
             while (count($codes) < 20) {

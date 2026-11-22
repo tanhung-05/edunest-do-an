@@ -4,8 +4,36 @@ import { Button } from '@/components/ui/button';
 import teacher from '@/routes/teacher';
 import type { CourseRow } from '@/types/course';
 
+/** UAT 22/11: nhãn nút theo đúng việc làm được ở trạng thái hiện tại của khóa. */
+export function authorActionLabel(c: CourseRow): string {
+    switch (c.open_version?.status) {
+        case 'NHAP':
+            return 'Tiếp tục soạn';
+        case 'TRA_LAI':
+            return 'Sửa theo góp ý';
+        case 'CHO_DUYET':
+            return 'Xem bản chờ duyệt';
+        case 'DA_DUYET':
+            return 'Xem bản đã duyệt';
+        default:
+            return 'Xem nội dung, tạo bản mới';
+    }
+}
+
+function statusText(c: CourseRow): string {
+    return c.open_version
+        ? `Bản ${c.open_version.version_no}: ${c.open_version.status_label}`
+        : `Đã công bố, ${c.sale_status_label.toLowerCase()}`;
+}
+
 /** Danh sách "Khóa tôi soạn" (MH-GV-01/02) v5: thẻ sạch, nhãn trạng thái, quá hạn và lý do trả lại nổi bật. */
-export function AuthorCourseList({ courses }: { courses: CourseRow[] }) {
+export function AuthorCourseList({
+    courses,
+    layout = 'grid',
+}: {
+    courses: CourseRow[];
+    layout?: 'grid' | 'list';
+}) {
     if (courses.length === 0) {
         return (
             <div className="flex items-center gap-4 rounded-2xl border border-dashed border-border bg-card p-5">
@@ -19,6 +47,54 @@ export function AuthorCourseList({ courses }: { courses: CourseRow[] }) {
         );
     }
 
+    if (layout === 'list') {
+        return (
+            <div className="overflow-x-auto rounded-2xl border border-border bg-card">
+                <table className="w-full min-w-[36rem] text-sm">
+                    <thead className="bg-muted/50 text-left text-xs text-muted-foreground">
+                        <tr>
+                            <th className="px-4 py-2 font-medium">Khóa học</th>
+                            <th className="px-4 py-2 font-medium">
+                                Trạng thái
+                            </th>
+                            <th className="px-4 py-2 font-medium">Hạn soạn</th>
+                            <th className="px-4 py-2 font-medium">
+                                <span className="sr-only">Thao tác</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {courses.map((c) => (
+                            <tr key={c.id} className="border-t border-border">
+                                <td className="px-4 py-2.5 font-medium wrap-anywhere">
+                                    {c.title}
+                                </td>
+                                <td className="px-4 py-2.5">
+                                    {statusText(c)}
+                                    {c.overdue && (
+                                        <span className="ml-2 text-xs font-semibold text-rose-700 dark:text-rose-300">
+                                            Quá hạn
+                                        </span>
+                                    )}
+                                </td>
+                                <td className="px-4 py-2.5 tabular-nums">
+                                    {c.due_date ?? '–'}
+                                </td>
+                                <td className="px-4 py-2.5 text-right">
+                                    <Button asChild size="sm">
+                                        <Link href={teacher.courses.show(c.id)}>
+                                            {authorActionLabel(c)}
+                                        </Link>
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+
     return (
         <ul className="grid gap-4 sm:grid-cols-2 2xl:grid-cols-3">
             {courses.map((c) => (
@@ -28,9 +104,7 @@ export function AuthorCourseList({ courses }: { courses: CourseRow[] }) {
                 >
                     <div className="flex flex-wrap items-center gap-2">
                         <span className="rounded-full bg-accent px-2.5 py-1 text-xs font-medium">
-                            {c.open_version
-                                ? `Bản ${c.open_version.version_no}: ${c.open_version.status_label}`
-                                : `Đã công bố, ${c.sale_status_label.toLowerCase()}`}
+                            {statusText(c)}
                         </span>
                         {c.overdue && (
                             <span className="rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 ring-1 ring-rose-200 dark:bg-rose-400/10 dark:text-rose-300 dark:ring-rose-400/30">
@@ -54,7 +128,9 @@ export function AuthorCourseList({ courses }: { courses: CourseRow[] }) {
                     )}
                     <div className="mt-auto flex flex-wrap gap-2 pt-2">
                         <Button asChild>
-                            <Link href={teacher.courses.show(c.id)}>Soạn</Link>
+                            <Link href={teacher.courses.show(c.id)}>
+                                {authorActionLabel(c)}
+                            </Link>
                         </Button>
                         <Button asChild variant="outline">
                             <Link

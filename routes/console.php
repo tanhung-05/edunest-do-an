@@ -16,6 +16,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
+use Minishlink\WebPush\VAPID;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -41,3 +42,10 @@ Schedule::command(GuardianWeeklyReports::class)->weeklyOn(0, '08:00')->timezone(
 Schedule::call(fn () => app(AffiliateCommissions::class)->sweep())->name('edunest:affiliates')->everyFiveMinutes()->withoutOverlapping();
 // P8 (02e §4): TV-20 nhắc buổi học trực tiếp trước 30 phút (CR-171/173).
 Schedule::call(fn () => app(LiveSessions::class)->remind(CarbonImmutable::now()))->name('edunest:live-reminders')->everyMinute()->withoutOverlapping();
+
+// CR-262: in cặp khóa VAPID mới để dán vào .env (Windows/Laragon: chạy với biến môi trường OPENSSL_CONF).
+Artisan::command('edunest:vapid', function () {
+    $keys = VAPID::createVapidKeys();
+    $this->line('VAPID_PUBLIC_KEY='.$keys['publicKey']);
+    $this->line('VAPID_PRIVATE_KEY='.$keys['privateKey']);
+})->purpose('Sinh cặp khóa VAPID cho thông báo đẩy');

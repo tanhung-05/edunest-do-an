@@ -16,11 +16,11 @@ use Illuminate\Support\Str;
 
 final class StartPayment
 {
-    public function handle(User $actor, Order $order, bool $accepted): Payment
+    public function handle(User $actor, Order $order, bool $accepted, PaymentChannel $channel = PaymentChannel::MoPhong): Payment
     {
         for ($attempt = 1; ; $attempt++) {
             try {
-                $payment = Tx::run(fn () => $this->start($actor, $order->id, $accepted));
+                $payment = Tx::run(fn () => $this->start($actor, $order->id, $accepted, $channel));
                 break;
             } catch (QueryException $e) {
                 if ($attempt >= 3 || Tx::code($e) !== 1062 || ! str_contains($e->getMessage(), 'payments_transaction_code_unique')) {
@@ -32,7 +32,7 @@ final class StartPayment
         return $payment ?? throw new DomainRejection('Đơn đã hết hạn.');
     }
 
-    private function start(User $actor, int $orderId, bool $accepted): ?Payment
+    private function start(User $actor, int $orderId, bool $accepted, PaymentChannel $channel): ?Payment
     {
         $order = OrderLocks::order($orderId);
         $student = OrderLocks::users($order, $actor);
@@ -53,7 +53,7 @@ final class StartPayment
         return $order->payments()->create([
             'transaction_code' => 'GD-'.Str::ulid(),
             'requested_amount' => $order->total,
-            'channel' => PaymentChannel::MoPhong,
+            'channel' => $channel,
             'txn_status' => PaymentTxnStatus::KhoiTao,
             'terms_accepted_at' => now(),
         ]);

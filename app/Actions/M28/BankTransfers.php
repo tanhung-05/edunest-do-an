@@ -16,6 +16,7 @@ use App\Models\M28\BankTransferReview;
 use App\Models\User;
 use App\Support\DomainRejection;
 use App\Support\M07\OrderLocks;
+use App\Support\M28\VietQr;
 use App\Support\Tx;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
@@ -210,12 +211,17 @@ final class BankTransfers
         $bank = (string) config('services.bank_sim.bank');
         $number = (string) config('services.bank_sim.account_number');
         $name = (string) config('services.bank_sim.account_name');
+        $bin = (string) config('services.bank_sim.bin');
+        // CR-261: có mã BIN ngân hàng thì QR theo chuẩn VietQR (quét bằng app ngân hàng); chưa có thì QR minh họa như cũ.
+        $vietqr = preg_match('/\A\d{6}\z/', $bin) === 1 && preg_match('/\A[0-9A-Za-z]{4,19}\z/', $number) === 1;
+        $content = $vietqr ? VietQr::payload($bin, $number, $order->total, self::memo($order))
+            : 'EDUNEST|'.$number.'|'.$order->total.'|'.self::memo($order);
 
         return [
             'bank' => $bank, 'account_number' => $number, 'account_name' => $name, 'amount' => $order->total,
             'memo' => self::memo($order), 'expires_at' => $order->expires_at->toIso8601String(),
-            'qr_svg' => (new Writer(new ImageRenderer(new RendererStyle(200, 1), new SvgImageBackEnd)))
-                ->writeString('EDUNEST|'.$number.'|'.$order->total.'|'.self::memo($order)),
+            'qr_svg' => (new Writer(new ImageRenderer(new RendererStyle(220, 1), new SvgImageBackEnd)))->writeString($content),
+            'vietqr' => $vietqr,
         ];
     }
 

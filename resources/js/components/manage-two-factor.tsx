@@ -12,6 +12,8 @@ export type Props = {
     canManageTwoFactor?: boolean;
     requiresConfirmation?: boolean;
     twoFactorEnabled?: boolean;
+    /** Đã sinh khóa bí mật nhưng chưa nhập mã xác nhận. */
+    twoFactorPending?: boolean;
 };
 
 export default function ManageTwoFactor(props: Props) {
@@ -29,6 +31,7 @@ export default function ManageTwoFactor(props: Props) {
         fetchRecoveryCodes,
         errors,
     } = useTwoFactorAuth();
+    const twoFactorPending = props.twoFactorPending ?? false;
     const [showSetupModal, setShowSetupModal] = useState<boolean>(false);
     const prevTwoFactorEnabled = useRef(twoFactorEnabled);
 
@@ -73,7 +76,7 @@ export default function ManageTwoFactor(props: Props) {
                     </p>
 
                     <div>
-                        {hasSetupData ? (
+                        {hasSetupData || twoFactorPending ? (
                             <Button onClick={() => setShowSetupModal(true)}>
                                 <ShieldCheck />
                                 Tiếp tục thiết lập
@@ -81,6 +84,10 @@ export default function ManageTwoFactor(props: Props) {
                         ) : (
                             <Form
                                 {...enable.form()}
+                                options={{
+                                    preserveState: true,
+                                    preserveScroll: true,
+                                }}
                                 onSuccess={() => setShowSetupModal(true)}
                             >
                                 {({ processing }) => (

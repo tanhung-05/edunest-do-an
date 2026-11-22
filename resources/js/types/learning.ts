@@ -21,7 +21,7 @@ export type LearningCourse = {
     expires_soon: boolean;
     progress: Progress;
     learning_entry: LearningEntry | null;
-    /** Khóa đã học xong: dẫn về bài đầu để ôn lại. Chỉ có ở trang Khóa của tôi. */
+    /** Khóa đã học xong: dẫn về bài đầu để ôn lại. */
     review_url?: string | null;
 };
 export type StudentCourse = LearningCourse & {

@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 // QT-06 (P2): tuyến công khai, giới hạn tần suất chung (09 P2.2).
 Route::middleware('throttle:public')->group(function () {
     Route::get('/', [PublicSite\CatalogController::class, 'home'])->name('home');
+    Route::get('/about', [PublicSite\AboutController::class, 'show'])->name('public.about');
     Route::get('/teachers/{teacher}', [PublicSite\TeacherPageController::class, 'show'])
         ->whereNumber('teacher')->name('public.teachers.show');
     Route::get('/courses', [PublicSite\CatalogController::class, 'index'])->name('public.courses.index');
@@ -57,6 +58,9 @@ Route::get('/certificates/{number}', [PublicSite\CertificateVerifyController::cl
     ->middleware('throttle:certificate-lookup')->name('public.certificates.show');
 // QT-06 A6: Khách bấm "Mua ngay" → đăng nhập rồi về đúng trang khóa; P3 thay bằng đặt đơn.
 Route::post('/webhooks/payment-sim', Webhook\PaymentSimulationController::class)->middleware('throttle:webhook')->name('webhooks.payment-sim');
+// P10 (CR-260): MoMo bản thử — IPN và trang quay lại.
+Route::post('/webhooks/momo', [Gateway\MoMoController::class, 'ipn'])->middleware('throttle:webhook')->name('webhooks.momo');
+Route::get('/payments/momo/return', [Gateway\MoMoController::class, 'back'])->middleware('throttle:webhook')->name('payments.momo.return');
 // P8 — QT-30: bộ mô phỏng ngân hàng (nguồn đối soát đã xác thực bằng HMAC).
 Route::post('/webhooks/bank-sim/transactions', [Webhook\BankSimulationController::class, 'transaction'])->middleware('throttle:webhook')->name('webhooks.bank-sim.transactions');
 Route::post('/webhooks/bank-sim/confirmations', [Webhook\BankSimulationController::class, 'confirmation'])->middleware('throttle:webhook')->name('webhooks.bank-sim.confirmations');
@@ -82,6 +86,8 @@ Route::middleware(['auth', 'account.active', 'password.changed', 'staff.2fa'])->
     Route::post('/notifications/read-all', [Account\NotificationController::class, 'readAll'])->name('account.notifications.read-all');
     Route::post('/notifications/{notification}/read', [Account\NotificationController::class, 'read'])->name('account.notifications.read');
     Route::put('/notifications/preferences', [Account\NotificationController::class, 'preferences'])->name('account.notifications.preferences');
+    Route::post('/account/push-subscriptions', [Account\PushSubscriptionController::class, 'store'])->middleware('throttle:20,1')->name('account.push.store');
+    Route::post('/account/push-subscriptions/delete', [Account\PushSubscriptionController::class, 'destroy'])->middleware('throttle:20,1')->name('account.push.destroy');
     Route::get('/account/devices', [Account\DeviceController::class, 'index'])->name('account.devices.index');
     Route::delete('/account/devices/{device}', [Account\DeviceController::class, 'destroy'])->whereNumber('device')->name('account.devices.destroy');
 
@@ -380,6 +386,7 @@ Route::middleware(['auth', 'account.active', 'password.changed', 'staff.2fa'])->
         Route::put('/exams/{exam}/publish-at', [Exams\ManageController::class, 'publishAt'])->name('exams.publish-at');
         Route::post('/teachers', [Academic\TeacherController::class, 'store'])->name('teachers.store');
         Route::post('/teachers/{user}/profile', [Academic\TeacherController::class, 'storeProfile'])->name('teachers.profile.store');
+        Route::put('/teachers/{user}/subjects', [Academic\TeacherController::class, 'subjects'])->name('teachers.subjects.update');
 
         // P1 — MH-GVU-03..06: khóa học, duyệt, công bố, bán.
         Route::get('/courses', [Academic\CourseController::class, 'index'])->name('courses.index');

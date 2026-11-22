@@ -31,12 +31,14 @@ export default function StudentOrder({
     order,
     transfer = null,
     transfer_simulator = false,
+    momo_enabled = false,
 }: {
     order: OrderDetail;
     transfer?: TransferInfo | null;
     transfer_simulator?: boolean;
+    momo_enabled?: boolean;
 }) {
-    const payment = useForm({ terms: false });
+    const payment = useForm({ terms: false, gateway: 'MO_PHONG' });
     const cancellation = useForm({});
     const [confirming, setConfirming] = useState(false);
     const [requestFailure, setRequestFailure] = useState(false);
@@ -155,6 +157,56 @@ export default function StudentOrder({
                                         >
                                             {payment.errors.terms}
                                         </p>
+                                    )}
+                                    {momo_enabled && (
+                                        <fieldset className="grid gap-2">
+                                            <legend className="mb-1 text-sm font-medium">
+                                                Cách thanh toán
+                                            </legend>
+                                            {[
+                                                {
+                                                    value: 'MOMO',
+                                                    label: 'Ví MoMo (môi trường thử)',
+                                                    hint: 'Chuyển sang trang MoMo, không trừ tiền thật.',
+                                                },
+                                                {
+                                                    value: 'MO_PHONG',
+                                                    label: 'Cổng mô phỏng',
+                                                    hint: 'Chọn Thành công hoặc Thất bại để thử luồng.',
+                                                },
+                                            ].map((g) => (
+                                                <label
+                                                    key={g.value}
+                                                    className="flex items-start gap-2 rounded-lg border border-border p-3 text-sm has-[:checked]:border-foreground"
+                                                >
+                                                    <input
+                                                        type="radio"
+                                                        name="gateway"
+                                                        value={g.value}
+                                                        checked={
+                                                            payment.data
+                                                                .gateway ===
+                                                            g.value
+                                                        }
+                                                        onChange={() =>
+                                                            payment.setData(
+                                                                'gateway',
+                                                                g.value,
+                                                            )
+                                                        }
+                                                        className="mt-0.5"
+                                                    />
+                                                    <span className="grid gap-0.5">
+                                                        <span className="font-medium">
+                                                            {g.label}
+                                                        </span>
+                                                        <span className="text-muted-foreground">
+                                                            {g.hint}
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                            ))}
+                                        </fieldset>
                                     )}
                                     <Button
                                         type="submit"

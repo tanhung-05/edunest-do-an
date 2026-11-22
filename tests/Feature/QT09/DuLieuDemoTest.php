@@ -45,7 +45,7 @@ it('Seed demo P4 chạy lặp, có hai bản ghi danh và bốn nhánh chứng n
     $this->seed([DemoSeeder::class, CourseDemoSeeder::class, LearningDemoSeeder::class]);
     $this->seed(LearningDemoSeeder::class);
     $course = Course::query()->where('title', 'Hóa 12 nền tảng')->sole();
-    $video = Lesson::query()->where('course_version_id', $course->current_version_id)->where('title', 'Video tiến độ')->sole();
+    $video = Lesson::query()->where('course_version_id', $course->current_version_id)->where('title', 'Este quanh ta (video)')->sole();
     Storage::disk('local')->assertExists($video->video_path);
     expect($video->video_duration_ms)->toBe(9674)
         ->and(Enrollment::query()->where('course_id', $course->id)->distinct()->count('course_version_id'))->toBe(2)

@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Storage;
 
 final class LearningDemoSeeder extends Seeder
 {
-    private const CHAPTER = 'Học thử luồng P4';
+    private const CHAPTER = 'Chương mở đầu. Video bài giảng';
 
     private const VIDEO_DURATION_MS = 9674;
 
@@ -116,7 +116,7 @@ BASE64;
             $draft = app(CreateDraftVersion::class)->handle($author, $course)['version'];
             $edit = app(EditDraftContent::class);
             $chapter = $edit->addSection($author, $draft->id, self::CHAPTER);
-            $lesson = $edit->addLesson($author, $chapter->id, 'Video tiến độ', LessonType::Video);
+            $lesson = $edit->addLesson($author, $chapter->id, 'Este quanh ta (video)', LessonType::Video);
             $lesson->forceFill(['video_path' => $path, 'video_duration_ms' => self::VIDEO_DURATION_MS, 'is_required' => true])->save();
             for ($position = $source->sections()->count(); $position > 0; $position--) {
                 $edit->move($author, 'section', $chapter->id, 'up');
@@ -152,7 +152,7 @@ BASE64;
         $token = $certificate->refresh()->pdf_job_token;
         if ($state === 'thu-hoi') {
             $certificate->update(['status' => CertificateStatus::DaThuHoi, 'revoked_at' => now(),
-                'revoked_by_id' => $staff->id, 'revoked_reason' => 'Dữ liệu demo thu hồi chứng nhận.', 'pdf_job_token' => null]);
+                'revoked_by_id' => $staff->id, 'revoked_reason' => 'Kết quả bài kiểm tra cuối khóa bị hủy do vi phạm quy chế thi, thu hồi theo quy định.', 'pdf_job_token' => null]);
         }
         if ($state !== 'cho-tao' && $token !== null) {
             $job = new GenerateCertificatePdf($certificate->id, $token);

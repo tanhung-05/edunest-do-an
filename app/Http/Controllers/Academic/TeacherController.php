@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Academic;
 
 use App\Actions\M01\ProvisionAccount;
 use App\Actions\M02\CreateTeacherProfile;
+use App\Actions\M02\SetTeacherSubjects;
 use App\Concerns\PasswordValidationRules;
 use App\Enums\M01\RoleCode;
 use App\Http\Controllers\Controller;
+use App\Models\M02\Category;
 use App\Models\M02\TeacherProfile;
 use App\Models\User;
 use App\Queries\M01\TeacherList;
@@ -28,6 +30,8 @@ class TeacherController extends Controller
         return Inertia::render('academic/teachers', [
             'teachers' => $query->get((string) $request->query('q', '')),
             'filters' => ['q' => (string) $request->query('q', '')],
+            // CR-259: danh mục môn để chọn chuyên môn.
+            'subjects' => self::subjectOptions(),
         ]);
     }
 
@@ -67,5 +71,33 @@ class TeacherController extends Controller
         $action->handle($actor, $user, $data);
 
         return back()->with('status', 'Đã lập hồ sơ giáo viên.');
+    }
+
+    /** CR-259 (UAT 22/11): Giáo vụ ghi chuyên môn giáo viên để gợi ý khi phân công soạn khóa. */
+    public function subjects(Request $request, User $user, SetTeacherSubjects $action): RedirectResponse
+    {
+        Gate::authorize('viewTeachers', User::class);
+        $data = $request->validate([
+            'subject_category_ids' => ['present', 'array'],
+            'subject_category_ids.*' => ['integer'],
+        ]);
+        /** @var User $actor */
+        $actor = $request->user();
+        /** @var array<int, mixed> $ids */
+        $ids = $data['subject_category_ids'];
+        $action->handle($actor, $user, array_values(array_map('intval', $ids)));
+
+        return back()->with('status', 'Đã lưu chuyên môn của '.$user->name.'.');
+    }
+
+    /** @return list<array{id: int, name: string}> */
+    public static function subjectOptions(): array
+    {
+        $cats = Category::query()->orderBy('position')->orderBy('name')->get()->toBase();
+
+        return array_values($cats->filter(fn (Category $c) => $c->parent_id !== null || $cats->where('parent_id', $c->id)->isEmpty())
+            ->map(fn (Category $c) => ['id' => $c->id, 'name' => $c->parent_id !== null
+                ? ($cats->firstWhere('id', $c->parent_id)->name ?? '').' / '.$c->name : $c->name])
+            ->sortBy('name')->values()->all());
     }
 }

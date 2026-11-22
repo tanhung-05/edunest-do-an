@@ -60,6 +60,7 @@ type Props = {
     import_errors: { row: number; message: string }[];
     ai: {
         enabled: boolean;
+        simulated: boolean;
         max: number;
         generate_url: string;
         lessons: IdName[];
@@ -217,7 +218,29 @@ export default function QuestionBankShow({
             </div>
             {ai.enabled && ai.lessons.length > 0 && (
                 <Block className="grid gap-3">
-                    <h2 className="font-semibold">AI gợi ý câu hỏi từ bài</h2>
+                    <div className="flex flex-wrap items-center gap-2">
+                        <h2 className="font-semibold">
+                            AI gợi ý câu hỏi từ bài
+                        </h2>
+                        <span
+                            className={
+                                ai.simulated
+                                    ? 'rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-900'
+                                    : 'rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-900'
+                            }
+                        >
+                            {ai.simulated
+                                ? 'Chế độ trích xuất tự động'
+                                : 'Đang dùng Gemini'}
+                        </span>
+                    </div>
+                    {ai.simulated && (
+                        <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                            Chưa cấu hình khóa Gemini nên hệ thống chỉ trích câu
+                            từ nội dung bài và đặt đáp án mặc định. Hãy kiểm tra
+                            lại đáp án và lời giải trước khi duyệt.
+                        </p>
+                    )}
                     <p className="text-sm text-muted-foreground">
                         AI tạo câu Đúng/Sai ở trạng thái Nháp từ nội dung bài
                         bạn chọn. Câu nháp chưa dùng được cho quiz, luyện tập

@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
 
         if (app()->environment('local')) {
-            $this->call([DemoSeeder::class, CourseDemoSeeder::class, CatalogDemoSeeder::class, OrderDemoSeeder::class, LearningDemoSeeder::class, CommerceDemoSeeder::class, ExamDemoSeeder::class, PracticeDemoSeeder::class, GuardianDemoSeeder::class, BundleDemoSeeder::class, AiDemoSeeder::class, LiveDemoSeeder::class, CommunityDemoSeeder::class, DemoBoSungSeeder::class]);
+            $this->call([DemoSeeder::class, CourseDemoSeeder::class, CatalogDemoSeeder::class, OrderDemoSeeder::class, LearningDemoSeeder::class, CommerceDemoSeeder::class, ExamDemoSeeder::class, PracticeDemoSeeder::class, GuardianDemoSeeder::class, BundleDemoSeeder::class, AiDemoSeeder::class, LiveDemoSeeder::class, CommunityDemoSeeder::class, DemoBoSungSeeder::class, GiangVienDemoSeeder::class, HoanThienDuLieuSeeder::class]);
         }
     }
 }

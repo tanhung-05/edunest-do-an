@@ -1,8 +1,8 @@
-import { Form, Head, Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { Flame } from 'lucide-react';
 import { vnTime } from '@/components/commerce';
+import { ConfirmAction } from '@/components/confirm-action';
 import { Block, Page, Stat } from '@/components/page';
-import { Button } from '@/components/ui/button';
 import guardian from '@/routes/guardian';
 
 type Props = {
@@ -41,18 +41,14 @@ export default function GuardianChild({ report, link_id }: Props) {
             }
             description="Dữ liệu chỉ đọc. Kết quả thi thử chỉ hiện điểm sau khi kỳ thi công bố."
             actions={
-                <Form
-                    {...guardian.links.destroy.form(link_id)}
-                    onBefore={() =>
-                        window.confirm(
-                            'Gỡ liên kết với con? Bạn sẽ không xem được dữ liệu và không nhận báo cáo tuần nữa.',
-                        )
-                    }
-                >
-                    <Button type="submit" variant="outline">
-                        Gỡ liên kết
-                    </Button>
-                </Form>
+                <ConfirmAction
+                    form={guardian.links.destroy.form(link_id)}
+                    label="Gỡ liên kết"
+                    variant="outline"
+                    title="Gỡ liên kết với con?"
+                    description="Bạn sẽ không theo dõi được tiến độ và không nhận báo cáo tuần nữa. Muốn theo dõi lại, con cần tạo mã mời mới."
+                    confirmLabel="Gỡ liên kết"
+                />
             }
         >
             <Head title={report.student.name} />

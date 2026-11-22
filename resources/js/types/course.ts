@@ -1,5 +1,7 @@
 export type Option = { value: string; label: string };
 export type IdName = { id: number; name: string };
+/** CR-259: giáo viên kèm chuyên môn (id danh mục môn). */
+export type TeacherOption = IdName & { subject_ids: number[] };
 
 export type CourseRow = {
     id: number;
@@ -97,7 +99,7 @@ export type CourseOptions = {
     categories: IdName[];
     levels: IdName[];
     tags: IdName[];
-    teachers: IdName[];
+    teachers: TeacherOption[];
     learningModes: Option[];
 };
 

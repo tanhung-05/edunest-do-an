@@ -134,6 +134,15 @@ function CourseTile({ course }: { course: LearningCourse }) {
                                 Tiếp tục học
                             </Link>
                         </Button>
+                    ) : course.review_url ? (
+                        <Button asChild variant="secondary">
+                            <Link
+                                href={course.review_url}
+                                aria-label={`Xem lại bài học ${course.title}`}
+                            >
+                                Xem lại bài học
+                            </Link>
+                        </Button>
                     ) : (
                         <span className="text-sm text-muted-foreground">
                             {course.validity === 'CON_HAN'

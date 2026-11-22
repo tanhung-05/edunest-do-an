@@ -36,10 +36,16 @@ class CatalogController extends Controller
             'price_max' => self::int($request->query('price_max')),
             'sort' => in_array($sort, $sorts, true) ? $sort : 'moi',
         ];
+        // UAT 22/11: khoảng giá nhập ngược (từ > đến) thì tự đảo hai đầu và báo cho người dùng.
+        $swapped = $filters['price_min'] !== null && $filters['price_max'] !== null && $filters['price_min'] > $filters['price_max'];
+        if ($swapped) {
+            [$filters['price_min'], $filters['price_max']] = [$filters['price_max'], $filters['price_min']];
+        }
 
         return Inertia::render('public/courses/index', [
             'courses' => PublicCatalog::list($filters),
             'filters' => $filters,
+            'priceSwapped' => $swapped,
             'options' => [
                 'categories' => Category::query()->orderBy('position')->orderBy('name')->get(['id', 'name', 'parent_id']),
                 'levels' => Level::query()->orderBy('position')->orderBy('name')->get(['id', 'name']),

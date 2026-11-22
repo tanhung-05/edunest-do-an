@@ -32,6 +32,7 @@ type Props = {
         total: number;
     };
     filters: Filters;
+    priceSwapped?: boolean;
     options: {
         categories: Category[];
         levels: Option[];
@@ -121,7 +122,12 @@ function CatalogPagination({ courses }: Pick<Props, 'courses'>) {
     );
 }
 
-export default function Catalog({ courses, filters, options }: Props) {
+export default function Catalog({
+    courses,
+    filters,
+    options,
+    priceSwapped = false,
+}: Props) {
     const scope = usePageMotion();
     const [loading, setLoading] = useState(false);
     const [failed, setFailed] = useState(false);
@@ -269,6 +275,15 @@ export default function Catalog({ courses, filters, options }: Props) {
                                 />
                             </Field>
                         </fieldset>
+                        {priceSwapped && (
+                            <p
+                                role="status"
+                                className="mt-3 text-sm text-amber-800 dark:text-amber-300"
+                            >
+                                Giá từ lớn hơn giá đến nên hệ thống đã đảo lại
+                                khoảng giá.
+                            </p>
+                        )}
                         <div className="mt-5 flex flex-wrap items-center gap-3">
                             <Button type="submit" className="h-10 px-5">
                                 Áp dụng

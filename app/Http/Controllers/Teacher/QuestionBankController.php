@@ -17,6 +17,8 @@ use App\Models\M04\QuestionBank;
 use App\Models\M05\CourseVersion;
 use App\Models\M05\Lesson;
 use App\Models\M11\Setting;
+use App\Support\M25\AiProvider;
+use App\Support\M25\FakeAiProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -52,7 +54,7 @@ class QuestionBankController extends Controller
         return redirect()->route('teacher.question-banks.show', $bank)->with('status', 'Đã tạo ngân hàng.');
     }
 
-    public function show(Request $request, QuestionBank $bank): Response
+    public function show(Request $request, QuestionBank $bank, AiProvider $provider): Response
     {
         Gate::authorize('view', $bank);
         $filters = [
@@ -100,6 +102,8 @@ class QuestionBankController extends Controller
             'ai' => [
                 'enabled' => Setting::valueFor('ai.enabled') === true && ! $bank->is_confidential,
                 'max' => AiQuestions::MAX_PER_REQUEST,
+                // UAT 22/11: cho giáo viên biết đang dùng AI thật hay bộ trích xuất tự động (chưa có khóa Gemini).
+                'simulated' => $provider instanceof FakeAiProvider,
                 'generate_url' => route('teacher.question-banks.ai.generate', $bank),
                 'lessons' => Lesson::query()->whereNull('removed_at')
                     ->where('course_version_id', CourseVersion::query()->where('course_id', $bank->course_id)->max('id'))
